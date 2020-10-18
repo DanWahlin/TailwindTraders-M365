@@ -9,7 +9,7 @@ describe("Customers", () => {
 
     it("should filter and display 10 customers", () => {
         cy.wait(200); // pause to let cards load
-        cy.get('[name="filter"]').type('ze');
+        cy.get('[name="filter"]').type('Lju');
         cy.get('.card').should('have.length', 1);
     });
 
