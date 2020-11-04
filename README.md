@@ -21,13 +21,20 @@ Clone the project or download and extract the .zip to get started.
 
 ## Modifying the Code
 
-If you'd like to modify the code you'll need the build process to rebuild the code after any changes that you make. To do that you can run:
+1. If you'd like to modify the code you'll need the build process to rebuild the code after any changes that you make. To do that you can run:
 
-```
-npm install
-npm run build:watch
-npm start
-```
+    ```
+    npm install
+    npm run build:watch
+    ```
 
-You will need to refresh the browser after any changes.
+1. Open another command window and run:
+
+    ```
+    npm start
+    ```
+
+1. Go to http://localhost:8080 in your browser 
+
+Note: The `npm run build:watch` command will rebuild your code when a file changes but you'll need to refresh your browser to see the changes.
 
