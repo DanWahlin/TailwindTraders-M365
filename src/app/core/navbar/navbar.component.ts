@@ -14,16 +14,17 @@ import { LoggerService } from '../services/logger.service';
 export class NavbarComponent implements OnInit, OnDestroy {
 
     isCollapsed: boolean;
-    loginLogoutText = 'Login';
+    loginLogoutText = '';
+    isAuthenticated = false;
     sub: Subscription;
 
     constructor(private router: Router,
-        private authservice: AuthService,
+        public authService: AuthService,
         private growler: GrowlerService,
         private logger: LoggerService) { }
 
     ngOnInit() {
-        this.sub = this.authservice.authChanged
+        this.sub = this.authService.authChanged
             .subscribe((loggedIn: boolean) => {
                 this.setLoginLogoutText();
             },
@@ -35,9 +36,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     }
 
     loginOrOut() {
-        const isAuthenticated = this.authservice.isAuthenticated;
+        const isAuthenticated = this.authService.isAuthenticated;
         if (isAuthenticated) {
-            this.authservice.logout()
+            this.authService.logout()
                 .subscribe((status: boolean) => {
                     this.setLoginLogoutText();
                     this.growler.growl('Logged Out', GrowlerMessageType.Info);
@@ -54,7 +55,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     }
 
     setLoginLogoutText() {
-        this.loginLogoutText = (this.authservice.isAuthenticated) ? 'Logout' : 'Login';
+        this.isAuthenticated = this.authService.isAuthenticated;
+        this.loginLogoutText = (this.authService.isAuthenticated) ? 'Logout' : '';
     }
 
 }
