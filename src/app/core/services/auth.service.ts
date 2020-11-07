@@ -1,58 +1,95 @@
-import { Injectable, Output, EventEmitter, Inject, Directive } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Injectable, Output, EventEmitter, OnDestroy } from '@angular/core';
 
-import { Observable } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
-
-import { IUserLogin } from '../../shared/interfaces';
-import { UtilitiesService } from './utilities.service';
+import { Subscription } from 'rxjs';
+import { BroadcastService, MsalService } from '@azure/msal-angular';
+import { Logger, CryptoUtils } from 'msal';
+import { Router } from '@angular/router';
 
 @Injectable()
-export class AuthService {
-    baseUrl = this.utilitiesService.getApiUrl();
-    authUrl = this.baseUrl + '/api/auth';
-    isAuthenticated = false;
+export class AuthService implements OnDestroy {
     redirectUrl: string;
+    subscriptions: Subscription[] = [];
+
+    isIframe = false;
+    loggedIn = false;
     @Output() authChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-    constructor(private http: HttpClient, private utilitiesService: UtilitiesService) {  }
+    constructor(private broadcastService: BroadcastService,
+        private router: Router,
+        private authService: MsalService,
+        ) { 
+        this.init();
+    }
 
     private userAuthChanged(status: boolean) {
-       this.authChanged.emit(status); // Raise changed event
+        this.authChanged.emit(status); // Raise changed event
     }
 
-    login(userLogin: IUserLogin): Observable<boolean> {
-        return this.http.post<boolean>(this.authUrl + '/login', userLogin)
-            .pipe(
-                map(loggedIn => {
-                    this.isAuthenticated = loggedIn;
-                    this.userAuthChanged(loggedIn);
-                    return loggedIn;
-                }),
-                catchError(this.handleError)
-            );
+    init() {
+        let loginSuccessSubscription: Subscription;
+        let loginFailureSubscription: Subscription;
+
+        this.isIframe = window !== window.parent && !window.opener;
+
+        this.checkAccount();
+
+        loginSuccessSubscription = this.broadcastService.subscribe('msal:loginSuccess', () => {
+            this.checkAccount();
+        });
+
+        loginFailureSubscription = this.broadcastService.subscribe('msal:loginFailure', (error) => {
+            console.log('Login Fails:', error);
+        });
+
+        this.subscriptions.push(loginSuccessSubscription);
+        this.subscriptions.push(loginFailureSubscription);
+
+        this.authService.handleRedirectCallback((authError, response) => {
+            if (authError) {
+                console.error('Redirect Error: ', authError.errorMessage);
+                return;
+            }
+
+            console.log('Redirect Success: ', response.accessToken);
+        });
+
+        this.authService.setLogger(new Logger((logLevel, message, piiEnabled) => {
+            console.log('MSAL Logging: ', message);
+        }, {
+            correlationId: CryptoUtils.createNewGuid(),
+            piiLoggingEnabled: false
+        }));
     }
 
-    logout(): Observable<boolean> {
-        return this.http.post<boolean>(this.authUrl + '/logout', null)
-            .pipe(
-                map(loggedOut => {
-                    this.isAuthenticated = !loggedOut;
-                    this.userAuthChanged(!loggedOut); // Return loggedIn status
-                    return loggedOut;
-                }),
-                catchError(this.handleError)
-            );
+    checkAccount() {
+        this.loggedIn = !!this.authService.getAccount();
     }
 
-    private handleError(error: HttpErrorResponse) {
-        console.error('server error:', error);
-        if (error.error instanceof Error) {
-          const errMessage = error.error.message;
-          return Observable.throw(errMessage);
-          // return Observable.throw(err.text() || 'backend server error');
+    login() {
+        const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
+
+        if (isIE) {
+            this.authService.loginRedirect();
+        } else {
+            this.authService.loginPopup({
+                scopes: [
+                    'user.read',
+                    'openid',
+                    'profile',
+                ]
+            }).then(val => {
+                this.userAuthChanged(!!val.account);
+                this.router.navigate(['/']);
+            });
         }
-        return Observable.throw(error || 'Server error');
+    }
+
+    logout() {
+        this.authService.logout();
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.forEach((subscription) => subscription.unsubscribe());
     }
 
 }
