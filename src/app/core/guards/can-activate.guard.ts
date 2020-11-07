@@ -10,7 +10,7 @@ export class CanActivateGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if (this.authService.isAuthenticated) {
+    if (this.authService.loggedIn) {
         return true;
     }
 

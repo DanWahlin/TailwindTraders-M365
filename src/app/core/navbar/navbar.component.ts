@@ -14,8 +14,7 @@ import { LoggerService } from '../services/logger.service';
 export class NavbarComponent implements OnInit, OnDestroy {
 
     isCollapsed: boolean;
-    loginLogoutText = '';
-    isAuthenticated = false;
+    loggedIn: boolean;
     sub: Subscription;
 
     constructor(private router: Router,
@@ -24,9 +23,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
         private logger: LoggerService) { }
 
     ngOnInit() {
+        this.loggedIn = this.authService.loggedIn;
         this.sub = this.authService.authChanged
             .subscribe((loggedIn: boolean) => {
-                this.setLoginLogoutText();
+                this.loggedIn = loggedIn;
+                this.growler.growl('Logged In', GrowlerMessageType.Info);
             },
             (err: any) => this.logger.log(err));
     }
@@ -35,28 +36,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.sub.unsubscribe();
     }
 
-    loginOrOut() {
-        const isAuthenticated = this.authService.isAuthenticated;
-        if (isAuthenticated) {
-            this.authService.logout()
-                .subscribe((status: boolean) => {
-                    this.setLoginLogoutText();
-                    this.growler.growl('Logged Out', GrowlerMessageType.Info);
-                    this.router.navigate(['/customers']);
-                    return;
-                },
-                (err: any) => this.logger.log(err));
+    logout() {
+        if (this.authService.loggedIn) {
+            this.authService.logout();
         }
         this.redirectToLogin();
     }
 
     redirectToLogin() {
         this.router.navigate(['/login']);
-    }
-
-    setLoginLogoutText() {
-        this.isAuthenticated = this.authService.isAuthenticated;
-        this.loginLogoutText = (this.authService.isAuthenticated) ? 'Logout' : '';
     }
 
 }
