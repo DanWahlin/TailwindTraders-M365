@@ -9,11 +9,32 @@ Clone the project or download and extract the .zip to get started.
 
     *IMPORTANT: The server uses ES2015 features so you need a current version of Node.js.*
 
-1. Open a terminal window and run `npm install` to install app dependencies.
+1. Open a terminal window and run the following commands to install dependencies, build the code, and start the server:
 
-1. Run `ng build --watch` in the terminal window to build the code.
-
-1. Open a **separate** terminal window and run `npm start` launch the web server
+    ```
+    npm install
+    npm run build
+    npm start
+    ```
 
 1. Go to http://localhost:8080 in your browser 
+
+## Modifying the Code
+
+1. If you'd like to modify the code you'll need the build process to rebuild the code after any changes that you make. To do that you can run:
+
+    ```
+    npm install
+    npm run build:watch
+    ```
+
+1. Open another command window and run:
+
+    ```
+    npm start
+    ```
+
+1. Go to http://localhost:8080 in your browser 
+
+Note: The `npm run build:watch` command will rebuild your code when a file changes but you'll need to refresh your browser to see the changes.
 
