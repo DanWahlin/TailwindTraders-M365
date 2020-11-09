@@ -27,7 +27,7 @@ const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigato
     CommonModule, RouterModule, HttpClientModule, GrowlerModule, ModalModule, OverlayModule,
     MsalModule.forRoot({
       auth: {
-        clientId: 'a80a2929-6ad8-4ba6-a605-ad137e63e9a6',
+        clientId: 'a1695d4d-84c0-4750-be9b-e049c9c68f19',
         authority: 'https://login.microsoftonline.com/organizations',
         redirectUri: 'http://localhost:8080/',
       },

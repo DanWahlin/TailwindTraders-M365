@@ -22,3 +22,5 @@ npm ERR! peer tslib@"^1.10.0" from @azure/msal-angular@1.1.1
 npm ERR! node_modules/@azure/msal-angular
 npm ERR!   @azure/msal-angular@"^1.1.1" from the root project
 ```
+
+Only solution was to update the package-lock.json.
