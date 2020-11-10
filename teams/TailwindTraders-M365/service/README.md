@@ -33,7 +33,12 @@ Run ngrok - point to port 3978
 
 ### `npm install`
 
+### `npm install adaptivecards`
+
+### `npm install adaptivecards-templating`
+
 ### `npm start`
+
 
 ## Deploy to Teams
 Start debugging the project by hitting the `F5` key or click the debug icon in Visual Studio Code and click the `Start Debugging` green arrow button.
