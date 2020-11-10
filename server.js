@@ -157,22 +157,22 @@ app.post('/api/auth/token', function(req, res) {
         };
     
         fetch(url, {
-            method: "POST",
-            body: querystring.stringify(params),
-            headers: {
-            Accept: "application/json",
-            "Content-Type": "application/x-www-form-urlencoded"
+                method: "POST",
+                body: querystring.stringify(params),
+                headers: {
+                Accept: "application/json",
+                "Content-Type": "application/x-www-form-urlencoded"
             }
         }).then(result => {
             if (result.status !== 200) {
-            result.json().then(json => {
-                // TODO: Check explicitly for invalid_grant or interaction_required
-                reject({"error":json.error});
-            });
+                result.json().then(json => {
+                    // TODO: Check explicitly for invalid_grant or interaction_required
+                    reject({"error":json.error});
+                });
             } else {
-            result.json().then(json => {
-                resolve(json.access_token);
-            });
+                result.json().then(json => {
+                    resolve(json.access_token);
+                });
             }
         });
     });
