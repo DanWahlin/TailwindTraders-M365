@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
-import { AuthService } from '../services/auth.service';
+import { AADAuthService } from '../services/aad-auth.service';
 import { GrowlerService, GrowlerMessageType } from '../growler/growler.service';
 import { LoggerService } from '../services/logger.service';
 
@@ -14,18 +14,20 @@ import { LoggerService } from '../services/logger.service';
 export class NavbarComponent implements OnInit, OnDestroy {
 
     isCollapsed: boolean;
-    loginLogoutText = 'Login';
+    loggedIn: boolean;
     sub: Subscription;
 
     constructor(private router: Router,
-        private authservice: AuthService,
+        public authService: AADAuthService,
         private growler: GrowlerService,
         private logger: LoggerService) { }
 
     ngOnInit() {
-        this.sub = this.authservice.authChanged
+        this.loggedIn = this.authService.loggedIn;
+        this.sub = this.authService.authChanged
             .subscribe((loggedIn: boolean) => {
-                this.setLoginLogoutText();
+                this.loggedIn = loggedIn;
+                this.growler.growl('Logged In', GrowlerMessageType.Info);
             },
             (err: any) => this.logger.log(err));
     }
@@ -34,27 +36,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.sub.unsubscribe();
     }
 
-    loginOrOut() {
-        const isAuthenticated = this.authservice.isAuthenticated;
-        if (isAuthenticated) {
-            this.authservice.logout()
-                .subscribe((status: boolean) => {
-                    this.setLoginLogoutText();
-                    this.growler.growl('Logged Out', GrowlerMessageType.Info);
-                    this.router.navigate(['/customers']);
-                    return;
-                },
-                (err: any) => this.logger.log(err));
+    logout() {
+        if (this.authService.loggedIn) {
+            this.authService.logout();
         }
         this.redirectToLogin();
     }
 
     redirectToLogin() {
         this.router.navigate(['/login']);
-    }
-
-    setLoginLogoutText() {
-        this.loginLogoutText = (this.authservice.isAuthenticated) ? 'Logout' : 'Login';
     }
 
 }

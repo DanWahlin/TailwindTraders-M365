@@ -1,12 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AADAuthService } from '../core/services/aad-auth.service';
+import { TeamsAuthService } from '../core/services/teams-auth.service';
 
-import { AuthService } from '../core/services/auth.service';
-import { ValidationService } from '../core/services/validation.service';
-import { IUserLogin } from '../shared/interfaces';
-import { GrowlerService, GrowlerMessageType } from '../core/growler/growler.service';
-import { LoggerService } from '../core/services/logger.service';
 
 @Component({
     selector: 'cm-login',
@@ -14,45 +10,19 @@ import { LoggerService } from '../core/services/logger.service';
     styleUrls: [ './login.component.css' ]
 })
 export class LoginComponent implements OnInit {
-    loginForm: FormGroup;
-    errorMessage: string;
+  
+    constructor(private router: Router, private aadAuthService: AADAuthService, private teamsAuthService: TeamsAuthService) { }
+  
+    ngOnInit() { 
+      this.teamsAuthService.login();
 
-    constructor(private formBuilder: FormBuilder,
-                private router: Router,
-                private authService: AuthService,
-                private growler: GrowlerService,
-                private logger: LoggerService) { }
-
-    ngOnInit() {
-        this.buildForm();
+      if (this.aadAuthService.loggedIn) {
+        this.router.navigate(['/']);
+      }
     }
 
-    buildForm() {
-        this.loginForm = this.formBuilder.group({
-            email:      ['', [ Validators.required, ValidationService.emailValidator ]],
-            password:   ['', [ Validators.required, ValidationService.passwordValidator ]]
-        });
+    login() {
+      this.aadAuthService.login();
     }
-
-    submit({ value, valid }: { value: IUserLogin, valid: boolean }) {
-        this.authService.login(value)
-            .subscribe((status: boolean) => {
-                if (status) {
-                    this.growler.growl('Logged in', GrowlerMessageType.Info);
-                    if (this.authService.redirectUrl) {
-                        const redirectUrl = this.authService.redirectUrl;
-                        this.authService.redirectUrl = '';
-                        this.router.navigate([redirectUrl]);
-                    } else {
-                        this.router.navigate(['/customers']);
-                    }
-                } else {
-                    const loginError = 'Unable to login';
-                    this.errorMessage = loginError;
-                    this.growler.growl(loginError, GrowlerMessageType.Danger);
-                }
-            },
-            (err: any) => this.logger.log(err));
-    }
-
+  
 }
