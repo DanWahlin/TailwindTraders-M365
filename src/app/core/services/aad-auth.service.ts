@@ -5,8 +5,8 @@ import { BroadcastService, MsalService } from '@azure/msal-angular';
 import { Logger, CryptoUtils } from 'msal';
 import { Router } from '@angular/router';
 
-@Injectable()
-export class AuthService implements OnDestroy {
+@Injectable({ providedIn: 'root' })
+export class AADAuthService implements OnDestroy {
     redirectUrl: string;
     subscriptions: Subscription[] = [];
 

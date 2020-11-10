@@ -23,4 +23,8 @@ npm ERR! node_modules/@azure/msal-angular
 npm ERR!   @azure/msal-angular@"^1.1.1" from the root project
 ```
 
-Only solution was to update the package-lock.json.
+Only solution was to update the package-lock.json and get the right version of tslib defined.
+
+## Login popup redirecting to web app (customers) inside of popup
+
+When using ngrok make sure that you're going to the https version rather than http (and also that you're not goig to localhost). https is used in the registered app in AAD.

@@ -17,7 +17,9 @@ Clone the project or download and extract the .zip to get started.
     npm start
     ```
 
-1. Go to http://localhost:8080 in your browser 
+1. Run `ngrok http -subdomain=<your-subdomain>.ngrok.io 8080` to launch ngrok (assumes ngrok basic or higher with custom subdomain support).
+
+1. Go to http://<your-subdomain>.ngrok.io:8080 in your browser.
 
 ## Modifying the Code
 
@@ -34,7 +36,9 @@ Clone the project or download and extract the .zip to get started.
     npm start
     ```
 
-1. Go to http://localhost:8080 in your browser 
+1. Run `ngrok http -subdomain=<your-subdomain>.ngrok.io 8080` to launch ngrok (assumes ngrok basic or higher with custom subdomain support).
+
+1. Go to http://<your-subdomain>.ngrok.io:8080 in your browser.
 
 Note: The `npm run build:watch` command will rebuild your code when a file changes but you'll need to refresh your browser to see the changes.
 
