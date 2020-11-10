@@ -7,18 +7,10 @@ import { GrowlerModule } from './growler/growler.module';
 import { ModalModule } from './modal/modal.module';
 import { OverlayModule } from './overlay/overlay.module';
 
-import { DataService } from './services/data.service';
 import { NavbarComponent } from './navbar/navbar.component';
-import { FilterService } from './services/filter.service';
-import { SorterService } from './services/sorter.service';
-import { TrackByService } from './services/trackby.service';
-import { DialogService } from './services/dialog.service';
 import { EnsureModuleLoadedOnceGuard } from './ensure-module-loaded-once.guard';
-import { AuthService } from './services/auth.service';
-import { EventBusService } from './services/event-bus.service';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { MsalModule, MsalInterceptor } from '@azure/msal-angular';
-import { CanActivateGuard } from './guards/can-activate.guard';
 
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
@@ -27,9 +19,9 @@ const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigato
     CommonModule, RouterModule, HttpClientModule, GrowlerModule, ModalModule, OverlayModule,
     MsalModule.forRoot({
       auth: {
-        clientId: 'a80a2929-6ad8-4ba6-a605-ad137e63e9a6',
+        clientId: 'a1695d4d-84c0-4750-be9b-e049c9c68f19',
         authority: 'https://login.microsoftonline.com/organizations',
-        redirectUri: 'http://localhost:8080/',
+        redirectUri: 'https://learntogethercrm.ngrok.io',
       },
       cache: {
         cacheLocation: 'localStorage',
@@ -52,13 +44,7 @@ const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigato
   ],
   exports: [GrowlerModule, RouterModule, HttpClientModule, ModalModule, OverlayModule, NavbarComponent],
   declarations: [NavbarComponent],
-  providers: [SorterService, FilterService, DataService, TrackByService, CanActivateGuard,
-    DialogService, AuthService, EventBusService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true,
-    },
+  providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: MsalInterceptor,

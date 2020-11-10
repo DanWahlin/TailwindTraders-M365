@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../core/services/auth.service';
+import { AADAuthService } from '../core/services/aad-auth.service';
+import { TeamsAuthService } from '../core/services/teams-auth.service';
 
 
 @Component({
@@ -10,16 +11,18 @@ import { AuthService } from '../core/services/auth.service';
 })
 export class LoginComponent implements OnInit {
   
-    constructor(private router: Router, private authService: AuthService) { }
+    constructor(private router: Router, private aadAuthService: AADAuthService, private teamsAuthService: TeamsAuthService) { }
   
     ngOnInit() { 
-      if (this.authService.loggedIn) {
+      this.teamsAuthService.login();
+
+      if (this.aadAuthService.loggedIn) {
         this.router.navigate(['/']);
       }
     }
 
     login() {
-      this.authService.login();
+      this.aadAuthService.login();
     }
   
 }

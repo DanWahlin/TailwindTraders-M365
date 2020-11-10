@@ -9,6 +9,7 @@ const app_routes: Routes = [
   { path: 'customers/:id', data: { preload: true }, loadChildren: () => import('./customer/customer.module').then(m => m.CustomerModule), canActivate: [CanActivateGuard] },
   { path: 'customers', loadChildren: () => import('./customers/customers.module').then(m => m.CustomersModule), canActivate: [CanActivateGuard] },
   { path: 'orders', data: { preload: true }, loadChildren: () => import('./orders/orders.module').then(m => m.OrdersModule), canActivate: [CanActivateGuard] },
+  { path: 'teams-config', loadChildren: () => import('./teams-config/teams-config.module').then(m => m.TeamsConfigModule) },
   { path: '**', pathMatch: 'full', redirectTo: '/customers' } // catch any unfound routes and redirect to home page
 
   // NOTE: If you're using Angular 7 or lower you'll lazy loads routes the following way
