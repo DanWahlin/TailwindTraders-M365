@@ -11,7 +11,15 @@ export class AADAuthService implements OnDestroy {
     subscriptions: Subscription[] = [];
 
     isIframe = false;
-    loggedIn = false;
+    _loggedIn = false;
+    get loggedIn() {
+        return this._loggedIn;
+    }
+    set loggedIn(val: boolean) {
+        this._loggedIn = val;
+        this.userAuthChanged(val);
+    }
+
     @Output() authChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     constructor(private broadcastService: BroadcastService,

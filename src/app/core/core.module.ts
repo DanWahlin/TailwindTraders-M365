@@ -9,10 +9,15 @@ import { OverlayModule } from './overlay/overlay.module';
 
 import { NavbarComponent } from './navbar/navbar.component';
 import { EnsureModuleLoadedOnceGuard } from './ensure-module-loaded-once.guard';
-import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { MsalModule, MsalInterceptor } from '@azure/msal-angular';
 
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
+const isIFrame = window.self !== window.top;
+const msalProviders = (!isIFrame) ? {
+  provide: HTTP_INTERCEPTORS,
+  useClass: MsalInterceptor,
+  multi: true
+} : [];
 
 @NgModule({
   imports: [
@@ -45,11 +50,7 @@ const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigato
   exports: [GrowlerModule, RouterModule, HttpClientModule, ModalModule, OverlayModule, NavbarComponent],
   declarations: [NavbarComponent],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: MsalInterceptor,
-      multi: true
-    },
+    msalProviders,
     { provide: 'Window', useFactory: () => window }
   ] // these should be singleton
 })

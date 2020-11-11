@@ -3,19 +3,21 @@ import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from
 import { Observable } from 'rxjs';
 
 import { AADAuthService } from '../services/aad-auth.service';
+import { TeamsAuthService } from '../services/teams-auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class CanActivateGuard implements CanActivate {
 
-  constructor(private authService: AADAuthService, private router: Router) { }
+  constructor(private aadAuthService: AADAuthService, 
+              private router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if (this.authService.loggedIn) {
+    if (this.aadAuthService.loggedIn) {
         return true;
     }
 
     // Track URL user is trying to go to so we can send them there after logging in
-    this.authService.redirectUrl = state.url;
+    this.aadAuthService.redirectUrl = state.url;
     this.router.navigate(['/login']);
     return false;
   }
