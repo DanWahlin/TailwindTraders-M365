@@ -76,17 +76,38 @@ server.post('/api/messages', (req, res) => {
     });
 });
 
+function getCustomer(id){
+
+    return fetch("http://localhost:8080/api/customers/${id}",
+            {
+                method: 'GET',
+                headers: {
+                    "accept": "application/json",
+                    //"authorization": "bearer " + data
+                },
+                mode: 'cors',
+                cache: 'default'
+            })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw (`Error ${response.status}: ${response.statusText}`);
+                }
+            })
+            .then((customer) => {
+                return customer;
+            });
+}
+
 //Reference: https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-proactive-message?view=azure-bot-service-4.0&tabs=javascript
 
 server.get('/api/notify', async (req, res) => {
+    
     for (const conversationReference of Object.values(conversationReferences)) {
         await adapter.continueConversation(conversationReference, async (context) => {
             // If you encounter permission-related errors when sending this message, see
-            // https://aka.ms/BotTrustServiceUrl
-           
-            const userName = await TeamsInfo.getMembers(context,encodeURI(userInfo.id));
-
-            
+            // https://aka.ms/BotTrustServiceUrl            
             var CustomerLoad = 
                 {
                     "type": "AdaptiveCard",
@@ -183,26 +204,31 @@ server.get('/api/notify', async (req, res) => {
             
             // Expand the template with your `$root` data object.
             // This binds it to the data and produces the final Adaptive Card payload
+
+            let customer = await getCustomer(1);
+               
+
             var ManagerCardLoad = template.expand({
-             $root:     {
-                "id": 1,
-                "firstName": "Ted",
-                "lastName": "James",
-                "profileImage":"https://pbs.twimg.com/profile_images/3647943215/d7f12830b3c17a5a9e4afcc370e3a37e_400x400.jpeg",
-                "gender": "male",
-                "address": "1234 Anywhere St.",
-                "city": " Phoenix ",
-                "state": {
-                  "abbreviation": "AZ",
-                  "name": "Arizona"
-                },
-                "orders": [
-                  { "productName": "Basketball", "itemCost": 7.99 },
-                  { "productName": "Shoes", "itemCost": 199.99 }
-                ],
-                "latitude": 33.299,
-                "longitude": -111.963
-              }
+             $root: customer
+                 //{
+            //     "id": 1,
+            //     "firstName": "Ted",
+            //     "lastName": "James",
+            //     "profileImage":"https://pbs.twimg.com/profile_images/3647943215/d7f12830b3c17a5a9e4afcc370e3a37e_400x400.jpeg",
+            //     "gender": "male",
+            //     "address": "1234 Anywhere St.",
+            //     "city": " Phoenix ",
+            //     "state": {
+            //       "abbreviation": "AZ",
+            //       "name": "Arizona"
+            //     },
+            //     "orders": [
+            //       { "productName": "Basketball", "itemCost": 7.99 },
+            //       { "productName": "Shoes", "itemCost": 199.99 }
+            //     ],
+            //     "latitude": 33.299,
+            //     "longitude": -111.963
+            //   }
               
             });
             var adaptiveCard = new AdaptiveCards.AdaptiveCard();
