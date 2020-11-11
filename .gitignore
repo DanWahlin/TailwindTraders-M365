@@ -19,5 +19,5 @@ src/app/dist
 cypress/videos/
 cypress/screenshots/
 
-
-
+# mac
+.DS_Store
