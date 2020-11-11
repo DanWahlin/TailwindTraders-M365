@@ -77,9 +77,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [],
-            "styles": [
-
-            ],
+            "styles": [],
             "assets": [
               "src/assets",
               "src/favicon.ico"
@@ -187,5 +185,8 @@
     "@schematics/angular:directive": {
       "prefix": "cm"
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
