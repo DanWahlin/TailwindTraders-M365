@@ -9,21 +9,25 @@ import { AADAuthService } from './aad-auth.service';
 @Injectable({ providedIn: 'root' })
 export class TeamsAuthService {
 
-    constructor(private aadAuthService: AADAuthService) {}
+    constructor(private aadAuthService: AADAuthService) { }
 
     login() {
         return new Promise((resolve, reject) => {
             try {
-                microsoftTeams.initialize();
-                microsoftTeams.getContext(async context => {
-                    if (context) {
-                        console.log('Teams context', context);
-                        // In-line code
-                        const clientSideToken = await this.getClientSideToken();
-                        const serverSideToken = await this.getServerSideToken(clientSideToken);
-                        const graphResponse = await this.useServerSideToken(serverSideToken);
-                        this.aadAuthService.loggedIn = true;
-                        resolve(graphResponse);
+                const teamsCheckTimeout = setTimeout(() => {
+                    reject();
+                }, 500);
+                microsoftTeams.initialize(() => {
+                    microsoftTeams.getContext(async context => {
+                        clearTimeout(teamsCheckTimeout);
+                        if (context) {
+                            console.log('Teams context', context);
+                            // In-line code
+                            const clientSideToken = await this.getClientSideToken();
+                            const serverSideToken = await this.getServerSideToken(clientSideToken);
+                            const graphResponse = await this.useServerSideToken(serverSideToken);
+                            this.aadAuthService.loggedIn = true;
+                            resolve(graphResponse);
                             // .then((clientSideToken) => {
                             //     return this.getServerSideToken(clientSideToken);
                             // })
@@ -57,10 +61,11 @@ export class TeamsAuthService {
                             //         this.display(`Error from web service: ${error}`);
                             //     }
                             // });
-                    }
-                    else {
-                        reject(null);
-                    }
+                        }
+                        else {
+                            reject(null);
+                        }
+                    });
                 });
             }
             catch (e) {
