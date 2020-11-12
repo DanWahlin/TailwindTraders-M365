@@ -30,17 +30,17 @@ app.use(function(req, res, next) {
     next();
 });
 
-// Pop-up dialog to ask for additional permissions, redirects to AAD page
-app.get('/authstart', (req, res) => {
-    var clientId = config.get("tab.appId");
-    res.render('auth-start', { clientId: clientId });
-});
-
 //The dist folder has our static resources (index.html, css, images)
 if (!inContainer) {
     app.use(express.static(__dirname + '/dist')); 
     console.log(__dirname);
 }
+
+// Pop-up dialog to ask for additional permissions, redirects to AAD page
+app.get('/authstart', (req, res) => {
+    var clientId = config.get("tab.appId");
+    res.render('auth-start', { clientId: clientId });
+});
 
 // End of the pop-up dialog auth flow, returns the results back to parent window
 app.get('/authend', (req, res) => {
@@ -197,12 +197,12 @@ app.listen(port);
 console.log('Express listening on port ' + port);
 
 //Open browser
-if (!inContainer && !inAzure) {
-    var opn = require('opn');
+// if (!inContainer && !inAzure) {
+//     var opn = require('opn');
 
-    opn('http://localhost:' + port).then(() => {
-        console.log('Browser closed.');
-    });
-}
+//     opn('http://localhost:' + port).then(() => {
+//         console.log('Browser closed.');
+//     });
+// }
 
 

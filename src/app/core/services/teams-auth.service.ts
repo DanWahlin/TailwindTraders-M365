@@ -24,43 +24,15 @@ export class TeamsAuthService {
                             console.log('Teams context', context);
                             // In-line code
                             const clientSideToken = await this.getClientSideToken();
-                            const serverSideToken = await this.getServerSideToken(clientSideToken);
-                            const graphResponse = await this.useServerSideToken(serverSideToken);
-                            this.aadAuthService.loggedIn = true;
-                            resolve(graphResponse);
-                            // .then((clientSideToken) => {
-                            //     return this.getServerSideToken(clientSideToken);
-                            // })
-                            // .then((serverSideToken) => {
-                            //     return this.useServerSideToken(serverSideToken);
-                            // })
-                            // .catch((error) => {
-                            //     if (error === "invalid_grant") {
-                            //         alert('invalid grant');
-                            //         this.display(`Error: ${error} - user or admin consent required`);
-                            //         // Display in-line button so user can consent
-                            //         // let button = this.display("Consent", "button");
-                            //         // button.onclick = (() => {
-                            //         //     this.requestConsent()
-                            //         //         .then((result) => {
-                            //         //             // Consent succeeded - use the token we got back
-                            //         //             let accessToken = JSON.parse(result as string).accessToken;
-                            //         //             this.display(`Received access token ${accessToken}`);
-                            //         //             this.useServerSideToken(accessToken);
-                            //         //         })
-                            //         //         .catch((error) => {
-                            //         //             this.display(`ERROR ${error}`);
-                            //         //             // Consent failed - offer to refresh the page
-                            //         //             button.disabled = true;
-                            //         //             let refreshButton = this.display("Refresh page", "button");
-                            //         //             refreshButton.onclick = (() => { window.location.reload(); });
-                            //         //         });
-                            //         // });
-                            //     } else {
-                            //         // Something else went wrong
-                            //         this.display(`Error from web service: ${error}`);
-                            //     }
-                            // });
+                            try {
+                                const serverSideToken = await this.getServerSideToken(clientSideToken);
+                                const graphResponse = await this.useServerSideToken(serverSideToken);
+                                this.aadAuthService.loggedIn = true;
+                                resolve(graphResponse);
+                            }
+                            catch (error) {
+                                reject(error);
+                            }
                         }
                         else {
                             reject(null);
@@ -154,6 +126,26 @@ export class TeamsAuthService {
         } else {
             throw (`Error ${response.status}: ${response.statusText}`);
         }
+    }
+
+    async grantConsent() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                // Consent succeeded - use the token we got back
+                let result = await this.requestConsent();
+                let accessToken = JSON.parse(result as string).accessToken;
+                this.display(`Received access token ${accessToken}`);
+                this.useServerSideToken(accessToken);
+                resolve(accessToken);
+            }
+            catch (error) {
+                this.display(`ERROR ${error}`);
+                // Consent failed - offer to refresh the page
+                // button.disabled = true;
+                // let refreshButton = this.display("Refresh page", "button");
+                // refreshButton.onclick = (() => { window.location.reload(); });
+            }
+        });
     }
 
     // Show the consent pop-up
