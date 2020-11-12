@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FindValueSubscriber } from 'rxjs/internal/operators/find';
 import { AADAuthService } from '../core/services/aad-auth.service';
 import { TeamsAuthService } from '../core/services/teams-auth.service';
 
@@ -24,15 +23,15 @@ export class LoginComponent implements OnInit {
       if (graphProfile === 'invalid_grant') {
         this.grantConsentVisible = true;
         return;
-      }
+      } 
 
-      if (!this.aadAuthService.loggedIn) {
+      // See if we're logged in (set by MSAL as well as Teams for this app)
+      if (this.aadAuthService.loggedIn) {
+        return this.navigate();
+      }    
+      else {
         this.loginVisible = true;
         return;
-      }      
-
-      if (graphProfile || this.aadAuthService.loggedIn) {
-        return this.navigate();
       }
     }
 
@@ -53,8 +52,8 @@ export class LoginComponent implements OnInit {
 
     async grantConsent() {
       let token = await this.teamsAuthService.grantConsent();
-      alert(token);
-      this.navigate();
+      console.log('Grant token received', token);
+      window.location.reload();
     }
 
     login() {

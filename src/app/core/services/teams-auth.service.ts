@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import * as microsoftTeams from '@microsoft/teams-js';
 import { AADAuthService } from './aad-auth.service';
 
@@ -8,8 +8,12 @@ import { AADAuthService } from './aad-auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class TeamsAuthService {
+    loggedIn = false;
+    initialized = false;
 
     constructor(private aadAuthService: AADAuthService) { }
+
+    teamsInitialized: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     login() {
         return new Promise((resolve, reject) => {
@@ -18,6 +22,8 @@ export class TeamsAuthService {
                     reject();
                 }, 500);
                 microsoftTeams.initialize(() => {
+                    this.initialized = true;
+                    this.teamsInitialized.emit(true);
                     microsoftTeams.getContext(async context => {
                         clearTimeout(teamsCheckTimeout);
                         if (context) {
@@ -27,7 +33,7 @@ export class TeamsAuthService {
                             try {
                                 const serverSideToken = await this.getServerSideToken(clientSideToken);
                                 const graphResponse = await this.useServerSideToken(serverSideToken);
-                                this.aadAuthService.loggedIn = true;
+                                this.aadAuthService.loggedIn = this.loggedIn = true;
                                 resolve(graphResponse);
                             }
                             catch (error) {
@@ -140,6 +146,7 @@ export class TeamsAuthService {
             }
             catch (error) {
                 this.display(`ERROR ${error}`);
+                reject(error);
                 // Consent failed - offer to refresh the page
                 // button.disabled = true;
                 // let refreshButton = this.display("Refresh page", "button");

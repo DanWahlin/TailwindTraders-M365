@@ -28,3 +28,9 @@ Only solution was to update the package-lock.json and get the right version of t
 ## Login popup redirecting to web app (customers) inside of popup
 
 When using ngrok make sure that you're going to the https version rather than http (and also that you're not goig to localhost). https is used in the registered app in AAD.
+
+## Need to retrigger grant consent when app is running in Teams
+
+Go into AAD, go to Enterprise applications, find the app, delete it.
+
+If you don't see the app in Enterprise applications, do an Empty Cache and Hard Reload on the Teams page.

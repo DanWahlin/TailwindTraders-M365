@@ -15,7 +15,7 @@
                 <ul class="nav navbar-nav nav-pills navBarPadding">
                     <li routerLinkActive="active"><a routerLink="/customers">Customers</a></li>
                     <li routerLinkActive="active"><a routerLink="/orders">Orders</a></li>
-                    <li routerLinkActive="active" (click)="logout()" data-cy="login-logout"><a>Logout</a></li>
+                    <li routerLinkActive="active" *ngIf="!teamsInitialized" (click)="logout()" data-cy="login-logout"><a>Logout</a></li>
                 </ul>
             </span>
         </div>
