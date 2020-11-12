@@ -1,13 +1,23 @@
 "use strict";
-var express     = require('express'),
-    bodyParser  = require('body-parser'),
-    fs          = require('fs'), 
-    app         = express(), 
-    customers   = JSON.parse(fs.readFileSync('data/customers.json', 'utf-8')),
-    states      = JSON.parse(fs.readFileSync('data/states.json', 'utf-8')),
-    inContainer = process.env.CONTAINER,
-    inAzure = process.env.WEBSITE_RESOURCE_GROUP,
-    port = process.env.PORT || 8080;
+const   express     = require('express'),
+        exphbs      = require('express-handlebars'),
+        bodyParser  = require('body-parser'),
+        fs          = require('fs'), 
+        fetch       = require("node-fetch"),
+        querystring = require("querystring"),
+        app         = express(), 
+        config      = require('config'),
+        customers   = JSON.parse(fs.readFileSync('data/customers.json', 'utf-8')),
+        states      = JSON.parse(fs.readFileSync('data/states.json', 'utf-8')),
+        inContainer = process.env.CONTAINER,
+        inAzure = process.env.WEBSITE_RESOURCE_GROUP,
+        port = process.env.PORT || 8080;
+
+const hbs = exphbs.create({
+    extname: '.hbs'
+});
+app.engine('hbs', hbs.engine);
+app.set('view engine', 'hbs');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -25,6 +35,18 @@ if (!inContainer) {
     app.use(express.static(__dirname + '/dist')); 
     console.log(__dirname);
 }
+
+// Pop-up dialog to ask for additional permissions, redirects to AAD page
+app.get('/authstart', (req, res) => {
+    var clientId = config.get("tab.appId");
+    res.render('auth-start', { clientId: clientId });
+});
+
+// End of the pop-up dialog auth flow, returns the results back to parent window
+app.get('/authend', (req, res) => {
+    var clientId = config.get("tab.appId");
+    res.render('auth-end', { clientId: clientId });
+}); 
 
 app.get('/api/customers/page/:skip/:top', (req, res) => {
     const topVal = req.params.top,
@@ -117,14 +139,50 @@ app.get('/api/states', (req, res) => {
     res.json(states);
 });
 
-app.post('/api/auth/login', (req, res) => {
-    var userLogin = req.body;
-    //Add "real" auth here. Simulating it by returning a simple boolean.
-    res.json(true);
-});
+// On-behalf-of token exchange
+app.post('/api/auth/token', function(req, res) {
+    var tid = req.body.tid;
+    var token = req.body.token;
+    var scopes = ["https://graph.microsoft.com/User.Read"];
 
-app.post('/api/auth/logout', (req, res) => {
-    res.json(true);
+    var oboPromise = new Promise((resolve, reject) => {
+        const url = "https://login.microsoftonline.com/" + tid + "/oauth2/v2.0/token";
+        const params = {
+            client_id: config.get("tab.appId"),
+            client_secret: config.get("tab.appPassword"),
+            grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
+            assertion: token,
+            requested_token_use: "on_behalf_of",
+            scope: scopes.join(" ")
+        };
+    
+        fetch(url, {
+                method: "POST",
+                body: querystring.stringify(params),
+                headers: {
+                Accept: "application/json",
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+        }).then(result => {
+            if (result.status !== 200) {
+                result.json().then(json => {
+                    // TODO: Check explicitly for invalid_grant or interaction_required
+                    reject({"error":json.error});
+                });
+            } else {
+                result.json().then(json => {
+                    resolve(json.access_token);
+                });
+            }
+        });
+    });
+
+    oboPromise.then(function(result) {
+        res.json(result);
+    }, function(err) {
+        console.log(err); // Error: "It broke"
+        res.json(err);
+    });
 });
 
 if (!inContainer) {
@@ -139,12 +197,12 @@ app.listen(port);
 console.log('Express listening on port ' + port);
 
 //Open browser
-if (!inContainer && !inAzure) {
-    var opn = require('opn');
+// if (!inContainer && !inAzure) {
+//     var opn = require('opn');
 
-    opn('http://localhost:' + port).then(() => {
-        console.log('Browser closed.');
-    });
-}
+//     opn('http://localhost:' + port).then(() => {
+//         console.log('Browser closed.');
+//     });
+// }
 
 

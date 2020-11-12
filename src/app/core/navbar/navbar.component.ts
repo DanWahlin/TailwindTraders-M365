@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
-import { AuthService } from '../services/auth.service';
+import { AADAuthService } from '../services/aad-auth.service';
 import { GrowlerService, GrowlerMessageType } from '../growler/growler.service';
 import { LoggerService } from '../services/logger.service';
 
@@ -18,7 +18,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     sub: Subscription;
 
     constructor(private router: Router,
-        public authService: AuthService,
+        public authService: AADAuthService,
         private growler: GrowlerService,
         private logger: LoggerService) { }
 

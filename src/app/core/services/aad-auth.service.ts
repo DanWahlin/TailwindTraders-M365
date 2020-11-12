@@ -5,13 +5,21 @@ import { BroadcastService, MsalService } from '@azure/msal-angular';
 import { Logger, CryptoUtils } from 'msal';
 import { Router } from '@angular/router';
 
-@Injectable()
-export class AuthService implements OnDestroy {
+@Injectable({ providedIn: 'root' })
+export class AADAuthService implements OnDestroy {
     redirectUrl: string;
     subscriptions: Subscription[] = [];
 
     isIframe = false;
-    loggedIn = false;
+    _loggedIn = false;
+    get loggedIn() {
+        return this._loggedIn;
+    }
+    set loggedIn(val: boolean) {
+        this._loggedIn = val;
+        this.userAuthChanged(val);
+    }
+
     @Output() authChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     constructor(private broadcastService: BroadcastService,
@@ -35,10 +43,14 @@ export class AuthService implements OnDestroy {
 
         loginSuccessSubscription = this.broadcastService.subscribe('msal:loginSuccess', () => {
             this.checkAccount();
+            if (this.loggedIn) {
+                console.log('LOGIN SUCCESS!');
+                this.router.navigate(['/']);
+            }
         });
 
         loginFailureSubscription = this.broadcastService.subscribe('msal:loginFailure', (error) => {
-            console.log('Login Fails:', error);
+            console.log('LOGIN FAILURE:', error);
         });
 
         this.subscriptions.push(loginSuccessSubscription);
@@ -49,13 +61,13 @@ export class AuthService implements OnDestroy {
                 console.error('Redirect Error: ', authError.errorMessage);
                 return;
             }
-
             console.log('Redirect Success: ', response.accessToken);
         });
 
         this.authService.setLogger(new Logger((logLevel, message, piiEnabled) => {
             console.log('MSAL Logging: ', message);
-        }, {
+        }, 
+        {
             correlationId: CryptoUtils.createNewGuid(),
             piiLoggingEnabled: false
         }));
@@ -65,21 +77,19 @@ export class AuthService implements OnDestroy {
         this.loggedIn = !!this.authService.getAccount();
     }
 
-    login() {
+    async login() {
         const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
         if (isIE) {
             this.authService.loginRedirect();
         } else {
-            this.authService.loginPopup({
+            // msal events above will fire based on success or failure
+            await this.authService.loginPopup({
                 scopes: [
                     'user.read',
                     'openid',
                     'profile',
                 ]
-            }).then(val => {
-                this.userAuthChanged(!!val.account);
-                this.router.navigate(['/']);
             });
         }
     }
