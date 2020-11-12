@@ -29,6 +29,15 @@
           <option *ngFor="let state of states" [ngValue]="state.abbreviation">{{state.name}}</option>
       </select>
     </div>
+    <div class="form-group">
+      <label>Sales Associate</label>
+      <select class="form-control" 
+              [(ngModel)]="customer.salesAssociateId"
+              name="salesAssociate" 
+              required>
+          <option *ngFor="let salesAssociate of salesAssociates" [ngValue]="salesAssociate.id">{{salesAssociate.firstName}} {{salesAssociate.lastName}}</option>
+      </select>
+    </div>
     <div *ngIf="customer">
       <div class="alert alert-warning" *ngIf="customer.id && deleteMessageEnabled">
          Delete Customer?&nbsp;&nbsp;<button class="btn btn-danger" (click)="delete($event)">Yes</button>&nbsp;&nbsp;

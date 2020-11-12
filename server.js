@@ -9,6 +9,7 @@ const   express     = require('express'),
         config      = require('config'),
         customers   = JSON.parse(fs.readFileSync('data/customers.json', 'utf-8')),
         states      = JSON.parse(fs.readFileSync('data/states.json', 'utf-8')),
+        salesreps   = JSON.parse(fs.readFileSync('data/sales-associates.json', 'utf-8')),
         inContainer = process.env.CONTAINER,
         inAzure = process.env.WEBSITE_RESOURCE_GROUP,
         port = process.env.PORT || 8080;
@@ -137,6 +138,10 @@ app.get('/api/orders/:id', function(req, res) {
 
 app.get('/api/states', (req, res) => {
     res.json(states);
+});
+
+app.get('/api/salesreps', (req, res) => {
+    res.json(salesreps);
 });
 
 // On-behalf-of token exchange

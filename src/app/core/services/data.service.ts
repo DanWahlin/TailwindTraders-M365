@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
-import { ICustomer, IOrder, IState, IPagedResults, IApiResponse } from '../../shared/interfaces';
+import { ICustomer, IOrder, IState, IPagedResults, IApiResponse, ISalesAssociate } from '../../shared/interfaces';
 import { UtilitiesService } from './utilities.service';
 
 @Injectable({ providedIn: 'root' })
@@ -80,6 +80,11 @@ export class DataService {
 
     getStates(): Observable<IState[]> {
         return this.http.get<IState[]>(this.baseUrl + '/api/states')
+            .pipe(catchError(this.handleError));
+    }
+
+    getSalesAssociates(): Observable<ISalesAssociate[]> {
+        return this.http.get<ISalesAssociate[]>(this.baseUrl + '/api/salesreps')
             .pipe(catchError(this.handleError));
     }
 
