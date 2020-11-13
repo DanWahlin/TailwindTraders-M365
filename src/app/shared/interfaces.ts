@@ -16,7 +16,7 @@ export interface ICustomer {
     salesAssociateId?: number;
 }
 
-export interface ISalesAssociate {
+export interface ISalesPerson {
     id: number;
     firstName: string;
     lastName: string;
