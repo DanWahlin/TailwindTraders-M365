@@ -60,7 +60,13 @@ export class DataService {
 
     insertCustomer(customer: ICustomer): Observable<ICustomer> {
         return this.http.post<ICustomer>(this.customersBaseUrl, customer)
-            .pipe(catchError(this.handleError));
+            .pipe(
+                map((customer: ICustomer) => {
+                    // Send a message to Teams here
+                    return customer;
+                }),
+                catchError(this.handleError)
+            );
     }
 
     updateCustomer(customer: ICustomer): Observable<boolean> {
