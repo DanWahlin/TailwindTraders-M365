@@ -7,6 +7,7 @@ import { ModalService, IModalContent } from '../../core/modal/modal.service';
 import { ICustomer, ISalesPerson, IState } from '../../shared/interfaces';
 import { GrowlerService, GrowlerMessageType } from '../../core/growler/growler.service';
 import { LoggerService } from '../../core/services/logger.service';
+import { TeamsMessengerService } from '../../core/services/teams-messenger.service';
 
 @Component({
   selector: 'cm-customer-edit',
@@ -40,7 +41,8 @@ export class CustomerEditComponent implements OnInit {
     private dataService: DataService,
     private growler: GrowlerService,
     private modalService: ModalService,
-    private logger: LoggerService) { }
+    private logger: LoggerService,
+    private teamsService: TeamsMessengerService) { }
 
   ngOnInit() {
     // Subscribe to params so if it changes we pick it up. Don't technically need that here
@@ -87,6 +89,9 @@ export class CustomerEditComponent implements OnInit {
             this.customerForm.form.markAsPristine();
             this.growler.growl('Operation performed successfully.', GrowlerMessageType.Success);
             // this.router.navigate(['/customers']);
+
+            this.teamsService.notifyCustomerUpdated(this.customer.id);
+
           } else {
             const msg = 'Unable to update customer';
             this.growler.growl(msg, GrowlerMessageType.Danger);

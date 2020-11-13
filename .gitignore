@@ -11,6 +11,9 @@ sandboxes.ts
 src/app/**/*.js
 src/app/**/*.js.map
 
+# cert
+.cert
+
 # Ignore any Webpack generated files
 dist
 src/app/devDist

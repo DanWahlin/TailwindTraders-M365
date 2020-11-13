@@ -1,6 +1,7 @@
 "use strict";
 const   express     = require('express'),
         exphbs      = require('express-handlebars'),
+        https       = require('https'),
         bodyParser  = require('body-parser'),
         fs          = require('fs'), 
         fetch       = require("node-fetch"),
@@ -12,7 +13,7 @@ const   express     = require('express'),
         salespeople   = JSON.parse(fs.readFileSync('data/sales-people.json', 'utf-8')),
         inContainer = process.env.CONTAINER,
         inAzure = process.env.WEBSITE_RESOURCE_GROUP,
-        port = process.env.PORT || 8080;
+        port = process.env.PORT || 8443;
 
 const hbs = exphbs.create({
     extname: '.hbs'
@@ -197,7 +198,15 @@ if (!inContainer) {
     });
 }
 
-app.listen(port);
+// HTTP
+// app.listen(port);
+
+// HTTPS
+var privateKey  = fs.readFileSync('.cert/cert.key', 'utf8');
+var certificate = fs.readFileSync('.cert/cert.crt', 'utf8');
+var credentials = {key: privateKey, cert: certificate};
+var httpsServer = https.createServer(credentials, app);
+httpsServer.listen(port);
 
 console.log('Express listening on port ' + port);
 
