@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
-import { ICustomer, IOrder, IState, IPagedResults, IApiResponse, ISalesPerson as ISalesPerson } from '../../shared/interfaces';
+import { ICustomer, IOrder, IState, IPagedResults, IApiResponse, ISalesPerson } from '../../shared/interfaces';
 import { UtilitiesService } from './utilities.service';
 
 @Injectable({ providedIn: 'root' })
@@ -14,6 +14,7 @@ export class DataService {
     ordersBaseUrl = this.baseUrl + '/api/orders';
     orders: IOrder[];
     states: IState[];
+    salesPeople: ISalesPerson[];
 
     constructor(private http: HttpClient, private utilitiesService: UtilitiesService) {  }
 
@@ -79,13 +80,35 @@ export class DataService {
     }
 
     getStates(): Observable<IState[]> {
+        // Cache check
+        if (this.states) {
+            return of(this.states);
+        }
+
         return this.http.get<IState[]>(this.baseUrl + '/api/states')
-            .pipe(catchError(this.handleError));
+            .pipe(
+                map(states => {
+                    this.states = states;
+                    return states;
+                }),
+                catchError(this.handleError)
+            );
     }
 
     getSalesPeople(): Observable<ISalesPerson[]> {
+        // Cache check
+        if (this.salesPeople) {
+            return of(this.salesPeople);
+        }
+
         return this.http.get<ISalesPerson[]>(this.baseUrl + '/api/salespeople')
-            .pipe(catchError(this.handleError));
+            .pipe(
+                map(salesPeople => {
+                    this.salesPeople = salesPeople;
+                    return salesPeople;
+                }),
+                catchError(this.handleError)
+            );
     }
 
     private handleError(error: HttpErrorResponse) {

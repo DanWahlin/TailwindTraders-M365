@@ -17,9 +17,7 @@ const app_routes: Routes = [
 const isIframe = window !== window.parent && !window.opener;
 
 @NgModule({
-  imports: [ RouterModule.forRoot(app_routes, { preloadingStrategy: PreloadModulesStrategy,       
-    // Don't perform initial navigation in iframes
-    initialNavigation: !isIframe ? 'enabled' : 'disabled' /* enableTracing: true */ }) ],
+  imports: [ RouterModule.forRoot(app_routes, { preloadingStrategy: PreloadModulesStrategy, /* enableTracing: true */ }) ],
   exports: [ RouterModule ],
   providers: [CanActivateGuard, PreloadModulesStrategy]
 })
