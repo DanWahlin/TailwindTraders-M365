@@ -1,0 +1,4 @@
+BotId=<your bot app id>
+BotPassword=<your bot app password>
+CrmUrl=http://localhost
+CrmPort=8080
