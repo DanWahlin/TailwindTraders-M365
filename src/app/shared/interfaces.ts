@@ -13,7 +13,7 @@ export interface ICustomer {
     orderTotal?: number;
     latitude?: number;
     longitude?: number;
-    salesAssociateId?: number;
+    salesPersonId?: number;
 }
 
 export interface ISalesPerson {

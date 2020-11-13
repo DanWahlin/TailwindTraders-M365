@@ -29,7 +29,7 @@ export class CustomerEditComponent implements OnInit {
       }
     };
   states: IState[];
-  salesAssociates: ISalesPerson[];
+  salesPeople: ISalesPerson[];
   errorMessage: string;
   deleteMessageEnabled: boolean;
   operationText = 'Insert';
@@ -55,7 +55,7 @@ export class CustomerEditComponent implements OnInit {
     });
 
     this.dataService.getStates().subscribe((states: IState[]) => this.states = states);
-    this.dataService.getSalesPeople().subscribe((salesAssociates: ISalesPerson[]) => this.salesAssociates = salesAssociates);
+    this.dataService.getSalesPeople().subscribe((salesPeople: ISalesPerson[]) => this.salesPeople = salesPeople);
   }
 
   getCustomer(id: number) {

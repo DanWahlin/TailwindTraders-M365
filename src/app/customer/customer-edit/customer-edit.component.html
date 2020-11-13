@@ -30,12 +30,12 @@
       </select>
     </div>
     <div class="form-group">
-      <label>Sales Associate</label>
+      <label>Sales Person</label>
       <select class="form-control" 
-              [(ngModel)]="customer.salesAssociateId"
-              name="salesAssociate" 
+              [(ngModel)]="customer.salesPersonId"
+              name="salesPerson" 
               required>
-          <option *ngFor="let salesAssociate of salesAssociates" [ngValue]="salesAssociate.id">{{salesAssociate.firstName}} {{salesAssociate.lastName}}</option>
+          <option *ngFor="let salesPerson of salesPeople" [ngValue]="salesPerson.id">{{salesPerson.firstName}} {{salesPerson.lastName}}</option>
       </select>
     </div>
     <div *ngIf="customer">

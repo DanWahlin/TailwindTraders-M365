@@ -19,7 +19,11 @@
                             </a>
                         </div>
                         <div class="pull-left card-body-right">
-                            <div class="card-body-content">{{customer.city | trim }}, {{customer.state.name}}</div>
+                            <div class="card-body-content">
+                                {{ customer.city | trim }}, {{ customer.state.abbreviation }}
+                                <br />
+                                Sales: {{ customer.salesPersonId | salespersonfinder:salesPeople }}
+                            </div>
                             <a [routerLink]="['/customers',customer.id,'orders']">View Orders</a>
                         </div>
                     </div>

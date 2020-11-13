@@ -13,8 +13,8 @@
     },
     {
           "id": 2,
-          "firstName": "Natasha",
-          "lastName": "Jones",
+          "firstName": "Dan",
+          "lastName": "Wahlin",
           "gender": "female",
           "address": "345 Cedar Point Ave.",
           "city": "Dallas",
