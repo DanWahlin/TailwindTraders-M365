@@ -24,7 +24,7 @@ export class AADAuthService implements OnDestroy {
 
     constructor(private broadcastService: BroadcastService,
         private router: Router,
-        private authService: MsalService,
+        private msalAuthService: MsalService,
         ) { 
         this.init();
     }
@@ -56,7 +56,7 @@ export class AADAuthService implements OnDestroy {
         this.subscriptions.push(loginSuccessSubscription);
         this.subscriptions.push(loginFailureSubscription);
 
-        this.authService.handleRedirectCallback((authError, response) => {
+        this.msalAuthService.handleRedirectCallback((authError, response) => {
             if (authError) {
                 console.error('Redirect Error: ', authError.errorMessage);
                 return;
@@ -64,7 +64,7 @@ export class AADAuthService implements OnDestroy {
             console.log('Redirect Success: ', response.accessToken);
         });
 
-        this.authService.setLogger(new Logger((logLevel, message, piiEnabled) => {
+        this.msalAuthService.setLogger(new Logger((logLevel, message, piiEnabled) => {
             console.log('MSAL Logging: ', message);
         }, 
         {
@@ -74,17 +74,17 @@ export class AADAuthService implements OnDestroy {
     }
 
     checkAccount() {
-        this.loggedIn = !!this.authService.getAccount();
+        this.loggedIn = !!this.msalAuthService.getAccount();
     }
 
     async login() {
         const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
         if (isIE) {
-            this.authService.loginRedirect();
+            this.msalAuthService.loginRedirect();
         } else {
             // msal events above will fire based on success or failure
-            await this.authService.loginPopup({
+            await this.msalAuthService.loginPopup({
                 scopes: [
                     'user.read',
                     'openid',
@@ -95,7 +95,7 @@ export class AADAuthService implements OnDestroy {
     }
 
     logout() {
-        this.authService.logout();
+        this.msalAuthService.logout();
     }
 
     ngOnDestroy(): void {

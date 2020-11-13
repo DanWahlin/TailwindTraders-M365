@@ -4,7 +4,7 @@ import { NgForm } from '@angular/forms';
 
 import { DataService } from '../../core/services/data.service';
 import { ModalService, IModalContent } from '../../core/modal/modal.service';
-import { ICustomer, IState } from '../../shared/interfaces';
+import { ICustomer, ISalesPerson, IState } from '../../shared/interfaces';
 import { GrowlerService, GrowlerMessageType } from '../../core/growler/growler.service';
 import { LoggerService } from '../../core/services/logger.service';
 
@@ -29,6 +29,7 @@ export class CustomerEditComponent implements OnInit {
       }
     };
   states: IState[];
+  salesPeople: ISalesPerson[];
   errorMessage: string;
   deleteMessageEnabled: boolean;
   operationText = 'Insert';
@@ -54,6 +55,7 @@ export class CustomerEditComponent implements OnInit {
     });
 
     this.dataService.getStates().subscribe((states: IState[]) => this.states = states);
+    this.dataService.getSalesPeople().subscribe((salesPeople: ISalesPerson[]) => this.salesPeople = salesPeople);
   }
 
   getCustomer(id: number) {

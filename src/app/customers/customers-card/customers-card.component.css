@@ -1,5 +1,5 @@
 .card-container {
-    width:85%;
+    width:100%;
 }
 
 .card {
@@ -16,6 +16,7 @@
     color:white;
     padding:5px;
     width:100%;
+    padding-left: 10px;
 }
 
 .card-close {
@@ -33,12 +34,12 @@
 }
 
 .card-body-right {
-    margin-left: 20px;
+    margin-left: 10px;
     margin-top: 2px;
 }
 
 .card-body-content {
-    width: 100px;
+
 }
 
 .card-image {

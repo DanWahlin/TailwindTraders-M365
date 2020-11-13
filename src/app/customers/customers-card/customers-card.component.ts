@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
-import { ICustomer } from '../../shared/interfaces';
+import { ICustomer, ISalesPerson } from '../../shared/interfaces';
 import { TrackByService } from '../../core/services/trackby.service';
 
 @Component({
@@ -15,6 +15,7 @@ import { TrackByService } from '../../core/services/trackby.service';
 export class CustomersCardComponent implements OnInit {
 
   @Input() customers: ICustomer[] = [];
+  @Input() salesPeople: ISalesPerson[] = [];
 
   constructor(public trackbyService: TrackByService) { }
 

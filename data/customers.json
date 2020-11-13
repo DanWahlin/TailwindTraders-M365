@@ -15,7 +15,8 @@
                 {"productName": "Shoes", "itemCost": 199.99}
             ],
             "latitude": 33.299,
-            "longitude": -111.963
+            "longitude": -111.963,
+            "salesPersonId": 5
       },
       {
             "id": 2,
@@ -33,7 +34,8 @@
                 {"productName": "Hat", "itemCost": 5.99}
             ],
             "latitude": 33.037,
-            "longitude": -117.291
+            "longitude": -117.291,
+            "salesPersonId": 5
       },
       {
             "id": 3,
@@ -52,7 +54,8 @@
                 {"productName": "Kangaroo Saddle", "itemCost": 179.99}
             ],
             "latitude": 47.596,
-            "longitude": -122.331
+            "longitude": -122.331,
+            "salesPersonId": 2
       },
       {
             "id": 4,
@@ -70,7 +73,8 @@
                 {"productName": "Swimming Cap", "itemCost": 5.49}
             ],
             "latitude": 33.299,
-            "longitude": -111.963
+            "longitude": -111.963,
+            "salesPersonId": 2
       },
       {
             "id": 5,
@@ -88,7 +92,8 @@
                 {"productName": "Arrows", "itemCost": 69.99}
             ],
             "latitude": 32.782927,
-            "longitude": -96.806191
+            "longitude": -96.806191,
+            "salesPersonId": 4
       },
       {
             "id": 6,
@@ -106,7 +111,8 @@
                 {"productName": "Bat", "itemCost": 19.99}
             ],
             "latitude": 28.384238,
-            "longitude": -81.564103
+            "longitude": -81.564103,
+            "salesPersonId": 3
       },
       {
             "id": 7,
@@ -125,7 +131,8 @@
                 {"productName": "Shark Repellent", "itemCost": 15.99}
             ],
             "latitude": 35.727985,
-            "longitude": -78.797594
+            "longitude": -78.797594,
+            "salesPersonId": 3
       },
       {
             "id": 8,
@@ -143,7 +150,8 @@
                 {"productName": "Riding cap", "itemCost": 79.99}
             ],
             "latitude": 33.809898,
-            "longitude": -117.918757
+            "longitude": -117.918757,
+            "salesPersonId": 2
       },
       {
             "id": 9,
@@ -161,7 +169,8 @@
                 {"productName": "Bat", "itemCost": 19.99}
             ],
             "latitude": 28.384238,
-            "longitude": -81.564103
+            "longitude": -81.564103,
+            "salesPersonId": 4
       },
       {
             "id": 10,
@@ -180,7 +189,8 @@
                 {"productName": "Shark Repellent", "itemCost": 7.99}
             ],
             "latitude": 33.762297, 
-            "longitude": -84.392953
+            "longitude": -84.392953,
+            "salesPersonId": 1
       },
       {
             "id": 11,
@@ -194,7 +204,8 @@
                 "name": "California"
             },
             "latitude": 34.042552,
-            "longitude": -118.266429
+            "longitude": -118.266429,
+            "salesPersonId": 2
       },
       {
             "id": 12,
@@ -208,7 +219,8 @@
                 "name": "Texas"
             },
             "latitude": 32.782927,
-            "longitude": -96.806191
+            "longitude": -96.806191,
+            "salesPersonId": 3
       },
       {
             "id": 13,
@@ -227,7 +239,8 @@
                 {"productName": "Shark Repellent", "itemCost": 7.99}
             ],
             "latitude": 40.725037,
-            "longitude": -74.004903
+            "longitude": -74.004903,
+            "salesPersonId": 3
       },
       {
             "id": 14,
@@ -241,7 +254,8 @@
                 "name": "New York"
             },
             "latitude": 40.725037,
-            "longitude": -74.004903
+            "longitude": -74.004903,
+            "salesPersonId": 4
       },
       {
             "id": 15,
@@ -255,7 +269,8 @@
                 "name": "New York"
             },
             "latitude": 41.028726,
-            "longitude": -73.758261
+            "longitude": -73.758261,
+            "salesPersonId": 3
       },
       {
             "id": 16,
@@ -269,7 +284,8 @@
                 "name": "Nevada"
             },
             "latitude": 36.091824,
-            "longitude": -115.174247
+            "longitude": -115.174247,
+            "salesPersonId": 1
       },
       {
             "id": 17,
@@ -283,7 +299,8 @@
                 "name": "Texas"
             },
             "latitude": 29.750163,
-            "longitude": -95.362769
+            "longitude": -95.362769,
+            "salesPersonId": 2
       },
       {
             "id": 18,
@@ -297,7 +314,8 @@
                 "name": "Washington"
             },
             "latitude": 47.596,
-            "longitude": -122.331
+            "longitude": -122.331,
+            "salesPersonId": 4
       },
       {
             "id": 19,
@@ -311,7 +329,8 @@
                 "name": "Catalonia"
             },
             "latitude": 41.386444, 
-            "longitude": 2.111988
+            "longitude": 2.111988,
+            "salesPersonId": 4
       },
       {
             "id": 20,
@@ -325,7 +344,8 @@
                 "name": "Iceland"
             },
             "latitude": 64.120278, 
-            "longitude": -21.830471
+            "longitude": -21.830471,
+            "salesPersonId": 2
       },
       {
             "id": 21,
@@ -343,7 +363,8 @@
                 {"productName": "Bat", "itemCost": 19.99}
             ],
             "latitude": 47.341337, 
-            "longitude": 8.582503
+            "longitude": 8.582503,
+            "salesPersonId": 4
       },
       {
             "id": 22,
@@ -353,10 +374,11 @@
             "address": "2543 Cassiano",
             "city": "Rio de Janeiro",
             "state": {
-                "abbreviation": "WA",
+                "abbreviation": "RIO",
                 "name": "Rio de Janeiro"
             },
             "latitude": -22.919369, 
-            "longitude": -43.181836
+            "longitude": -43.181836,
+            "salesPersonId": 4
       }
 ]

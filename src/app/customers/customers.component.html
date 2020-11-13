@@ -8,7 +8,7 @@
         </header>
         <br />
         <div class="row">
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <div class="navbar">
                     <ul class="nav navbar-nav">
                         <li class="toolbar-item">
@@ -40,6 +40,7 @@
         
         <cm-customers-card 
           [customers]="filteredCustomers" 
+          [salesPeople]="salesPeople"
           [hidden]="displayMode !== displayModeEnum.Card"></cm-customers-card>
     
         <cm-customers-grid 

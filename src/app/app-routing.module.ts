@@ -12,14 +12,9 @@ const app_routes: Routes = [
   { path: 'teams-config', loadChildren: () => import('./teams-config/teams-config.module').then(m => m.TeamsConfigModule) },
   { path: '**', pathMatch: 'full', redirectTo: '/customers' } // catch any unfound routes and redirect to home page
 
-  // NOTE: If you're using Angular 7 or lower you'll lazy loads routes the following way
-  
-  // { path: 'customers/:id', data: { preload: true }, loadChildren: 'app/customer/customer.module#CustomerModule' },
-  // { path: 'customers', loadChildren: 'app/customers/customers.module#CustomersModule' },
-  // { path: 'orders', data: { preload: true }, loadChildren: 'app/orders/orders.module#OrdersModule' },
-  // { path: 'about', loadChildren: 'app/about/about.module#AboutModule' },
-
 ];
+
+const isIframe = window !== window.parent && !window.opener;
 
 @NgModule({
   imports: [ RouterModule.forRoot(app_routes, { preloadingStrategy: PreloadModulesStrategy, /* enableTracing: true */ }) ],

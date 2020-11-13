@@ -1,25 +1,29 @@
 import { Component, OnInit, ViewChild, 
-  ViewContainerRef, ComponentFactoryResolver, ComponentRef } from '@angular/core';
+  ViewContainerRef, ComponentFactoryResolver, ComponentRef, OnDestroy } from '@angular/core';
 
 import { DataService } from '../core/services/data.service';
-import { ICustomer, IPagedResults } from '../shared/interfaces';
+import { ICustomer, IPagedResults, ISalesPerson } from '../shared/interfaces';
 import { FilterService } from '../core/services/filter.service';
 import { LoggerService } from '../core/services/logger.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
   selector: 'cm-customers',
   templateUrl: './customers.component.html'
 })
-export class CustomersComponent implements OnInit {
+export class CustomersComponent implements OnInit, OnDestroy {
 
   title: string;
   filterText: string;
   customers: ICustomer[] = [];
+  salesPeople: ISalesPerson[] = [];
   displayMode: DisplayModeEnum;
   displayModeEnum = DisplayModeEnum;
   totalRecords = 0;
   pageSize = 10;
+  customersSub: Subscription;
+  salesPeopleSub: Subscription;
   mapComponentRef: ComponentRef<any>;
   _filteredCustomers: ICustomer[] = [];
 
@@ -46,6 +50,7 @@ export class CustomersComponent implements OnInit {
     this.displayMode = DisplayModeEnum.Card;
 
     this.getCustomersPage(1);
+    this.getSalesPeople();
   }
 
   changeDisplayMode(mode: DisplayModeEnum) {
@@ -57,13 +62,18 @@ export class CustomersComponent implements OnInit {
   }
 
   getCustomersPage(page: number) {
-    this.dataService.getCustomersPage((page - 1) * this.pageSize, this.pageSize)
+    this.customersSub = this.dataService.getCustomersPage((page - 1) * this.pageSize, this.pageSize)
         .subscribe((response: IPagedResults<ICustomer[]>) => {
           this.customers = this.filteredCustomers = response.results;
           this.totalRecords = response.totalRecords;
         },
         (err: any) => this.logger.log(err),
         () => this.logger.log('getCustomersPage() retrieved customers for page: ' + page));
+  }
+
+  getSalesPeople() {
+    this.salesPeopleSub = this.dataService.getSalesPeople()
+      .subscribe((salesPeople: ISalesPerson[]) => this.salesPeople = salesPeople);
   }
 
   filterChanged(data: string) {
@@ -94,6 +104,11 @@ export class CustomersComponent implements OnInit {
     if (this.mapComponentRef) {
       this.mapComponentRef.instance.dataPoints = this.filteredCustomers;
     }
+  }
+
+  ngOnDestroy() {
+    this.customersSub.unsubscribe();
+    this.salesPeopleSub.unsubscribe();
   }
 
 

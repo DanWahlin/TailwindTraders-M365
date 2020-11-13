@@ -13,6 +13,17 @@ export interface ICustomer {
     orderTotal?: number;
     latitude?: number;
     longitude?: number;
+    salesPersonId?: number;
+}
+
+export interface ISalesPerson {
+    id: number;
+    firstName: string;
+    lastName: string;
+    gender: string;
+    address: string;
+    city: string;
+    state: IState;
 }
 
 export interface IMapDataPoint {
