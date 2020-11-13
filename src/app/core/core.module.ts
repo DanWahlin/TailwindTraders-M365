@@ -26,8 +26,7 @@ const msalProviders = (!isIFrame) ? {
       auth: {
         clientId: 'a1695d4d-84c0-4750-be9b-e049c9c68f19',
         authority: 'https://login.microsoftonline.com/organizations',
-        redirectUri: 'https://learntogethercrm.ngrok.io',
-        navigateToLoginRequestUrl: false
+        redirectUri: 'https://learntogethercrm.ngrok.io'
       },
       cache: {
         cacheLocation: 'localStorage',

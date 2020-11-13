@@ -46,5 +46,17 @@
             "abbreviation": "WA",
             "name": "Washington"
         }
-  }
+    },
+    {
+        "id": 5,
+        "firstName": "Burke",
+        "lastName": "Holland",
+        "gender": "male",
+        "address": "145 Mountain Dr.",
+        "city": "Nashville",
+        "state": {
+            "abbreviation": "TN",
+            "name": "Tennessee"
+        }
+    }
 ]
