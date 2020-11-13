@@ -10,10 +10,10 @@ const   express     = require('express'),
         config      = require('config'),
         customers   = JSON.parse(fs.readFileSync('data/customers.json', 'utf-8')),
         states      = JSON.parse(fs.readFileSync('data/states.json', 'utf-8')),
-        salespeople   = JSON.parse(fs.readFileSync('data/sales-people.json', 'utf-8')),
+        salespeople = JSON.parse(fs.readFileSync('data/sales-people.json', 'utf-8')),
         inContainer = process.env.CONTAINER,
         inAzure = process.env.WEBSITE_RESOURCE_GROUP,
-        port = process.env.PORT || 8443;
+        port = process.env.PORT || 8080;
 
 const hbs = exphbs.create({
     extname: '.hbs'
@@ -199,14 +199,14 @@ if (!inContainer) {
 }
 
 // HTTP
-// app.listen(port);
+app.listen(port);
 
 // HTTPS
-var privateKey  = fs.readFileSync('.cert/cert.key', 'utf8');
-var certificate = fs.readFileSync('.cert/cert.crt', 'utf8');
-var credentials = {key: privateKey, cert: certificate};
-var httpsServer = https.createServer(credentials, app);
-httpsServer.listen(port);
+// var privateKey  = fs.readFileSync('.cert/cert.key', 'utf8');
+// var certificate = fs.readFileSync('.cert/cert.crt', 'utf8');
+// var credentials = {key: privateKey, cert: certificate};
+// var httpsServer = https.createServer(credentials, app);
+// httpsServer.listen(port);
 
 console.log('Express listening on port ' + port);
 
