@@ -21,7 +21,7 @@ const conversationReferences = {};
 
 
 // Import bot definitions
-const { BotActivityHandler } = require('./botActivityHandler');
+const BotActivityHandler = require('./botActivityHandler');
 const { userInfo } = require('os');
 
 // Read botFilePath and botFileSecret from .env file.
@@ -35,7 +35,7 @@ const adapter = new BotFrameworkAdapter({
     appPassword: process.env.BotPassword
 });
 
-console.log('BotId', process.env.BotPassword);
+console.log('BotId', process.env.BotId);
 
 adapter.onTurnError = async (context, error) => {
     // This check writes out errors to console log .vs. app insights.

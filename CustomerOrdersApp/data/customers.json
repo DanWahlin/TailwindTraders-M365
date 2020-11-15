@@ -1,5 +1,5 @@
 [
-      {
+        {
             "id": 1,
             "firstName": "Sydney",
             "lastName": "Mattos",
@@ -17,7 +17,7 @@
             "latitude": 33.299,
             "longitude": -111.963,
             "salesPersonId": 5
-      },
+        },
       {
             "id": 2,
             "firstName": "Natasha",

@@ -9,7 +9,7 @@ const {
     CardFactory,
     ActionTypes
 } = require('botbuilder');
-const { CustomerService } = require('./services/customers');
+const CustomerService = require('./services/customers');
 
 const WELCOMED_USER = 'welcomedUserProperty';
 
@@ -51,6 +51,7 @@ class BotActivityHandler extends TeamsActivityHandler {
             }
 
             const text = context.activity.text.toLowerCase();
+            console.log('Message received: ', text);
             switch (text) {
                 case 'hello':
                 case 'hi':
@@ -61,10 +62,8 @@ class BotActivityHandler extends TeamsActivityHandler {
                 case 'customers':
                     const customerService = new CustomerService();
                     const customer = await customerService.getLatestCustomer();
-
                     const customerCard = require('./cards/customerCard');
                     const card = customerCard.getCard(customer);
-
                     await context.sendActivity({ attachments: [CardFactory.adaptiveCard(card)] });
                     break;
                 case 'intro':
@@ -121,5 +120,5 @@ class BotActivityHandler extends TeamsActivityHandler {
 }
 
 
-module.exports.BotActivityHandler = BotActivityHandler;
+module.exports = BotActivityHandler;
 

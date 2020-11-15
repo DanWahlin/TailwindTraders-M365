@@ -17,7 +17,7 @@ Clone the project or download and extract the .zip to get started.
     npm start
     ```
 
-1. Run `ngrok http -subdomain=<your-subdomain>.ngrok.io 8080` to launch ngrok (assumes ngrok basic or higher with custom subdomain support).
+1. Run `ngrok http -subdomain=<your-subdomain> 8080` to launch ngrok (assumes ngrok basic or higher with custom subdomain support).
 
 1. Go to http://<your-subdomain>.ngrok.io:8080 in your browser.
 
@@ -36,7 +36,7 @@ Clone the project or download and extract the .zip to get started.
     npm start
     ```
 
-1. Run `ngrok http -subdomain=<your-subdomain>.ngrok.io 8080` to launch ngrok (assumes ngrok basic or higher with custom subdomain support).
+1. Run `ngrok http -subdomain=<your-subdomain> 8080` to launch ngrok (assumes ngrok basic or higher with custom subdomain support).
 
 1. Go to http://<your-subdomain>.ngrok.io:8080 in your browser.
 
