@@ -7,10 +7,9 @@ const   express     = require('express'),
         fetch       = require("node-fetch"),
         querystring = require("querystring"),
         app         = express(), 
-        config      = require('config'),
         customers   = JSON.parse(fs.readFileSync('data/customers.json', 'utf-8')),
         states      = JSON.parse(fs.readFileSync('data/states.json', 'utf-8')),
-        salespeople = JSON.parse(fs.readFileSync('data/sales-people.json', 'utf-8')),
+        salesPeople = JSON.parse(fs.readFileSync('data/sales-people.json', 'utf-8')),
         inContainer = process.env.CONTAINER,
         inAzure = process.env.WEBSITE_RESOURCE_GROUP,
         port = process.env.PORT || 8080;
@@ -32,6 +31,9 @@ app.use(function(req, res, next) {
     next();
 });
 
+const ENV_FILE =__dirname + '/.env';
+require('dotenv').config({ path: ENV_FILE });
+
 //The dist folder has our static resources (index.html, css, images)
 if (!inContainer) {
     app.use(express.static(__dirname + '/dist')); 
@@ -40,13 +42,13 @@ if (!inContainer) {
 
 // Pop-up dialog to ask for additional permissions, redirects to AAD page
 app.get('/authstart', (req, res) => {
-    var clientId = config.get("tab.appId");
+    var clientId = process.env.AppId;
     res.render('auth-start', { clientId: clientId });
 });
 
 // End of the pop-up dialog auth flow, returns the results back to parent window
 app.get('/authend', (req, res) => {
-    var clientId = config.get("tab.appId");
+    var clientId = process.env.AppId;
     res.render('auth-end', { clientId: clientId });
 }); 
 
@@ -72,7 +74,7 @@ app.get('/api/customers', (req, res) => {
 });
 
 app.get('/api/customers/:id', (req, res) => {
-    let customerId = +req.params.id;
+    const customerId = +req.params.id;
     let selectedCustomer = null;
     for (let customer of customers) {
         if (customer.id === customerId) {
@@ -86,8 +88,8 @@ app.get('/api/customers/:id', (req, res) => {
 });
 
 app.post('/api/customers', (req, res) => {
-    let postedCustomer = req.body;
-    let maxId = Math.max.apply(Math,customers.map((cust) => cust.id));
+    const postedCustomer = req.body;
+    const maxId = Math.max.apply(Math,customers.map((cust) => cust.id));
     postedCustomer.id = ++maxId;
     postedCustomer.gender = (postedCustomer.id % 2 === 0) ? 'female' : 'male';
     customers.push(postedCustomer);
@@ -95,8 +97,8 @@ app.post('/api/customers', (req, res) => {
 });
 
 app.put('/api/customers/:id', (req, res) => {
-    let putCustomer = req.body;
-    let id = +req.params.id;
+    const putCustomer = req.body;
+    const id = +req.params.id;
     let status = false;
 
     //Ensure state name is in sync with state abbreviation 
@@ -117,7 +119,7 @@ app.put('/api/customers/:id', (req, res) => {
 });
 
 app.delete('/api/customers/:id', function(req, res) {
-    let customerId = +req.params.id;
+    const customerId = +req.params.id;
     for (let i=0,len=customers.length;i<len;i++) {
         if (customers[i].id === customerId) {
            customers.splice(i,1);
@@ -128,7 +130,7 @@ app.delete('/api/customers/:id', function(req, res) {
 });
 
 app.get('/api/orders/:id', function(req, res) {
-    let customerId = +req.params.id;
+    const customerId = +req.params.id;
     for (let cust of customers) {
         if (cust.customerId === customerId) {
             return res.json(cust);
@@ -141,8 +143,35 @@ app.get('/api/states', (req, res) => {
     res.json(states);
 });
 
-app.get('/api/salespeople', (req, res) => {
-    res.json(salespeople);
+app.get('/api/salesPeople', (req, res) => {
+    res.json(salesPeople);
+});
+
+app.get('/api/latestCustomer', (req, res) => {
+    const latestCustomer = customers.reduce((a, b) => {
+        if (a.joinDate && b.joinDate) {
+            return new Date(a.joinDate) > new Date(b.joinDate) ? a : b;
+        }
+    });
+    res.json(latestCustomer);
+});
+
+app.get('/api/customersBySalesPerson/:name', (req, res) => {
+    const name = req.params.name;
+    if (name) {
+        const splitName = name.split(' ');
+            if (splitName && splitName.length === 2) {
+            const salesPerson = salesPeople.find(sp => {
+                return sp.firstName.toLowerCase() === splitName[0].toLowerCase() && 
+                       sp.lastName.toLowerCase() === splitName[1].toLowerCase()
+            });
+            if (salesPerson) {
+                const selectedCustomers = customers.filter(c => c.salesPersonId === salesPerson.id);
+                return res.json(selectedCustomers);
+            }
+        }
+    }
+    return res.json(null);
 });
 
 // On-behalf-of token exchange
@@ -154,8 +183,8 @@ app.post('/api/auth/token', function(req, res) {
     var oboPromise = new Promise((resolve, reject) => {
         const url = "https://login.microsoftonline.com/" + tid + "/oauth2/v2.0/token";
         const params = {
-            client_id: config.get("tab.appId"),
-            client_secret: config.get("tab.appPassword"),
+            client_id: process.env.AppId,
+            client_secret: process.env.AppPassword,
             grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
             assertion: token,
             requested_token_use: "on_behalf_of",

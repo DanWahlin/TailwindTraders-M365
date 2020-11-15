@@ -45,10 +45,10 @@ class BotActivityHandler extends TeamsActivityHandler {
             const didBotWelcomedUser = await this.welcomedUserProperty.get(context, false);
 
             const userName = context.activity.from.name;
-            if (didBotWelcomedUser === false) {
-                await context.sendActivity(`Hi ${userName}.`);
-                await this.welcomedUserProperty.set(context, true);
-            }
+            // if (didBotWelcomedUser === false) {
+            //     await context.sendActivity(`Hi ${userName}.`);
+            //     await this.welcomedUserProperty.set(context, true);
+            // }
 
             const text = context.activity.text.toLowerCase();
             console.log('Message received: ', text);
@@ -57,9 +57,9 @@ class BotActivityHandler extends TeamsActivityHandler {
                 case 'hi':
                     await context.sendActivity(`Hi ${userName}. You don't have any new notifications.`);
                     break;
-                case 'cust':
+                case 'latest customer':
+                case 'latest cust':
                 case 'customer':
-                case 'customers':
                     const customerService = new CustomerService();
                     const customer = await customerService.getLatestCustomer();
                     const customerCard = require('./cards/customerCard');

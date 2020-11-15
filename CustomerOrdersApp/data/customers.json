@@ -16,7 +16,8 @@
             ],
             "latitude": 33.299,
             "longitude": -111.963,
-            "salesPersonId": 5
+            "salesPersonId": 5,
+            "joinDate": "02/10/2020"
         },
       {
             "id": 2,
@@ -35,7 +36,8 @@
             ],
             "latitude": 33.037,
             "longitude": -117.291,
-            "salesPersonId": 5
+            "salesPersonId": 5,
+            "joinDate": "04/15/2020"
       },
       {
             "id": 3,
@@ -55,7 +57,8 @@
             ],
             "latitude": 47.596,
             "longitude": -122.331,
-            "salesPersonId": 2
+            "salesPersonId": 2,
+            "joinDate": "09/05/2020"
       },
       {
             "id": 4,
@@ -74,7 +77,8 @@
             ],
             "latitude": 33.299,
             "longitude": -111.963,
-            "salesPersonId": 2
+            "salesPersonId": 2,
+            "joinDate": "01/01/2020"
       },
       {
             "id": 5,
@@ -93,7 +97,8 @@
             ],
             "latitude": 32.782927,
             "longitude": -96.806191,
-            "salesPersonId": 4
+            "salesPersonId": 4,
+            "joinDate": "11/10/2020"
       },
       {
             "id": 6,
@@ -112,7 +117,8 @@
             ],
             "latitude": 28.384238,
             "longitude": -81.564103,
-            "salesPersonId": 3
+            "salesPersonId": 3,
+            "joinDate": "11/30/2020"
       },
       {
             "id": 7,
@@ -132,7 +138,8 @@
             ],
             "latitude": 35.727985,
             "longitude": -78.797594,
-            "salesPersonId": 3
+            "salesPersonId": 3,
+            "joinDate": "07/22/2020"
       },
       {
             "id": 8,
@@ -151,7 +158,8 @@
             ],
             "latitude": 33.809898,
             "longitude": -117.918757,
-            "salesPersonId": 2
+            "salesPersonId": 2,
+            "joinDate": "6/02/2020"
       },
       {
             "id": 9,
@@ -170,7 +178,8 @@
             ],
             "latitude": 28.384238,
             "longitude": -81.564103,
-            "salesPersonId": 4
+            "salesPersonId": 4,
+            "joinDate": "08/1/2020"
       },
       {
             "id": 10,
@@ -190,7 +199,8 @@
             ],
             "latitude": 33.762297, 
             "longitude": -84.392953,
-            "salesPersonId": 1
+            "salesPersonId": 1,
+            "joinDate": "06/10/2020"
       },
       {
             "id": 11,
@@ -205,7 +215,8 @@
             },
             "latitude": 34.042552,
             "longitude": -118.266429,
-            "salesPersonId": 2
+            "salesPersonId": 2,
+            "joinDate": "12/15/2020"
       },
       {
             "id": 12,
@@ -220,7 +231,8 @@
             },
             "latitude": 32.782927,
             "longitude": -96.806191,
-            "salesPersonId": 3
+            "salesPersonId": 3,
+            "joinDate": "03/27/2020"
       },
       {
             "id": 13,
@@ -240,7 +252,8 @@
             ],
             "latitude": 40.725037,
             "longitude": -74.004903,
-            "salesPersonId": 3
+            "salesPersonId": 3,
+            "joinDate": "02/02/2020"
       },
       {
             "id": 14,
@@ -255,7 +268,8 @@
             },
             "latitude": 40.725037,
             "longitude": -74.004903,
-            "salesPersonId": 4
+            "salesPersonId": 4,
+            "joinDate": "04/09/2020"
       },
       {
             "id": 15,
@@ -270,7 +284,8 @@
             },
             "latitude": 41.028726,
             "longitude": -73.758261,
-            "salesPersonId": 3
+            "salesPersonId": 3,
+            "joinDate": "09/28/2020"
       },
       {
             "id": 16,
@@ -285,7 +300,8 @@
             },
             "latitude": 36.091824,
             "longitude": -115.174247,
-            "salesPersonId": 1
+            "salesPersonId": 1,
+            "joinDate": "02/28/2020"
       },
       {
             "id": 17,
@@ -300,7 +316,8 @@
             },
             "latitude": 29.750163,
             "longitude": -95.362769,
-            "salesPersonId": 2
+            "salesPersonId": 2,
+            "joinDate": "03/18/2020"
       },
       {
             "id": 18,
@@ -315,7 +332,8 @@
             },
             "latitude": 47.596,
             "longitude": -122.331,
-            "salesPersonId": 4
+            "salesPersonId": 4,
+            "joinDate": "07/04/2020"
       },
       {
             "id": 19,
@@ -330,7 +348,8 @@
             },
             "latitude": 41.386444, 
             "longitude": 2.111988,
-            "salesPersonId": 4
+            "salesPersonId": 4,
+            "joinDate": "08/29/2020"
       },
       {
             "id": 20,
@@ -345,7 +364,8 @@
             },
             "latitude": 64.120278, 
             "longitude": -21.830471,
-            "salesPersonId": 2
+            "salesPersonId": 2,
+            "joinDate": "04/01/2020"
       },
       {
             "id": 21,
@@ -364,7 +384,8 @@
             ],
             "latitude": 47.341337, 
             "longitude": 8.582503,
-            "salesPersonId": 4
+            "salesPersonId": 4,
+            "joinDate": "10/31/2020"
       },
       {
             "id": 22,
@@ -379,6 +400,7 @@
             },
             "latitude": -22.919369, 
             "longitude": -43.181836,
-            "salesPersonId": 4
+            "salesPersonId": 4,
+            "joinDate": "12/06/2020"
       }
 ]

@@ -3,19 +3,36 @@ const fetch = require('node-fetch');
 class CustomerService {
 
     async getLatestCustomer() {
-        const customers = await this.getJson('/api/customers');
+        const customer = await this.getJson('/api/latestCustomer');
         const salesPeople = await this.getJson('/api/salespeople');
-        if (customers && customers.length) {
-            const customer = customers[customers.length - 1];
-            if (salesPeople && salesPeople.length) {
-                const salesPerson = salesPeople.find(salesPerson => salesPerson.id === customer.salesPersonId);
+        if (customer) {
+            // Get customer's sales person
+            const salesPerson = await this.getCustomerSalesPerson(customer.salesPersonId);
+            if (salesPerson) {
                 customer.salesPerson = (salesPerson) ? salesPerson.firstName + ' ' + salesPerson.lastName : '';
             }
             return customer;
         }
-        else {
-            return null;
+        return null;
+    }
+
+    async getCustomerSalesPerson(salesPersonId) {
+        const salesPeople = await this.getJson('/api/salespeople');
+        if (salesPeople && salesPeople.length) {
+            const salesPerson = salesPeople.find(salesPerson => salesPerson.id === salesPersonId);
+            return salesPerson;
         }
+        return null;
+    }
+
+    async getCustomersBySalesPerson(salesPersonName) {
+        if (salesPersonName) {
+            // If salesPersonName == Burke Holland
+            // Example: https://learntogethercrm.ngrok.io/api/customersBySalesPerson/Burke%20Holland
+            const customers = await this.getJson('/api/latestCustomer/' + salesPersonName);
+            return customers;
+        }
+        return null;
     }
 
     async getJson(apiUrl) {
