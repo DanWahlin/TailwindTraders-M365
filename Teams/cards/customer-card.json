@@ -61,9 +61,7 @@
         },
         {
             "type": "Image",
-            "url": "https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/${$root.latitude},${$root.longitude}/4?&pp=${$root.latitude},${$root.longitude}&key=At1jz5shJJehBl94CpvgIIdaqVGcpOGfpkpU2nU4rRl3sV1MxWVMVYX92kXoLg5i",
-            "width": "200px",
-            "height": "200px"
+            "url": "https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/${$root.latitude},${$root.longitude}/4?&pp=${$root.latitude},${$root.longitude}&key=At1jz5shJJehBl94CpvgIIdaqVGcpOGfpkpU2nU4rRl3sV1MxWVMVYX92kXoLg5i"
         }
     ],
     "actions": [

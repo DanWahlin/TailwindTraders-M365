@@ -29,7 +29,7 @@ class CustomerService {
         if (salesPersonName) {
             // If salesPersonName == Burke Holland
             // Example: https://learntogethercrm.ngrok.io/api/customersBySalesPerson/Burke%20Holland
-            const customers = await this.getJson('/api/latestCustomer/' + salesPersonName);
+            const customers = await this.getJson('/api/customersBySalesPerson/' + salesPersonName);
             return customers;
         }
         return null;
