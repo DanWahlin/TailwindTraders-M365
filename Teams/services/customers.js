@@ -2,34 +2,43 @@ const fetch = require('node-fetch');
 
 class CustomerService {
 
-    async getLatestCustomer() {
-        const customer = await this.getJson('/api/latestCustomer');
-        const salesPeople = await this.getJson('/api/salespeople');
+    async getCustomer(id) {
+        const customer = await this.getJson(`/api/customers/${id}`);
         if (customer) {
             // Get customer's sales person
-            const salesPerson = await this.getCustomerSalesPerson(customer.salesPersonId);
-            if (salesPerson) {
-                customer.salesPerson = (salesPerson) ? salesPerson.firstName + ' ' + salesPerson.lastName : '';
-            }
-            return customer;
+            const customerWithSalesPerson = await this.getCustomerSalesPerson(customer);
+            return customerWithSalesPerson;
         }
         return null;
     }
 
-    async getCustomerSalesPerson(salesPersonId) {
-        const salesPeople = await this.getJson('/api/salespeople');
-        if (salesPeople && salesPeople.length) {
-            const salesPerson = salesPeople.find(salesPerson => salesPerson.id === salesPersonId);
-            return salesPerson;
+    async getLatestCustomer() {
+        const customer = await this.getJson('/api/latestCustomer');
+        if (customer) {
+            // Get customer's sales person
+            const customerWithSalesPerson = await this.getCustomerSalesPerson(customer);
+            return customerWithSalesPerson;
         }
         return null;
+    }
+
+    async getCustomerSalesPerson(customer) {
+        const salesPeople = await this.getJson('/api/salespeople');
+        if (customer && salesPeople && salesPeople.length) {
+            const salesPerson = salesPeople.find(salesPerson => salesPerson.id === customer.salesPersonId);
+            customer.salesPerson = (salesPerson) ? salesPerson.firstName + ' ' + salesPerson.lastName : '';
+        }
+        return customer;
     }
 
     async getCustomersBySalesPerson(salesPersonName) {
         if (salesPersonName) {
             // If salesPersonName == Burke Holland
             // Example: https://learntogethercrm.ngrok.io/api/customersBySalesPerson/Burke%20Holland
-            const customers = await this.getJson('/api/customersBySalesPerson/' + salesPersonName);
+            const customers = await this.getJson(`/api/customersBySalesPerson/${salesPersonName}'`);
+            for (let cust of customers) {
+                cust.salesPerson = salesPersonName;
+            }
             return customers;
         }
         return null;
@@ -38,7 +47,7 @@ class CustomerService {
     async getJson(apiUrl) {
         let result;
         try {
-            // Checking port since if ngrok is specific and port is 80 we don't want to add it (will break)
+            // Checking port since if ngrok is used and port is 80 we don't want to add it (will break)
             const port = (process.env.CrmPort === '80') ? '' : `:${process.env.CrmPort}`;
             const url = `${process.env.CrmUrl}${port}${apiUrl}`;
             const response = await fetch(url, {

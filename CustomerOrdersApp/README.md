@@ -5,6 +5,8 @@
 
 Clone the project or download and extract the .zip to get started. 
 
+1. Copy `.env sample` to a file named `.env`. Update the file with the Azure Active Directory AppId and password/secret you created.
+
 1. Install the latest LTS version of [Node.js](https://nodejs.org). 
 
     *IMPORTANT: The server uses ES2015 features so you need a current version of Node.js.*

@@ -89,9 +89,6 @@ export class CustomerEditComponent implements OnInit {
             this.customerForm.form.markAsPristine();
             this.growler.growl('Operation performed successfully.', GrowlerMessageType.Success);
             // this.router.navigate(['/customers']);
-
-            this.teamsService.notifyCustomerUpdated(this.customer.id);
-
           } else {
             const msg = 'Unable to update customer';
             this.growler.growl(msg, GrowlerMessageType.Danger);

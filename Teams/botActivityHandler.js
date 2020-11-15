@@ -58,7 +58,6 @@ class BotActivityHandler extends TeamsActivityHandler {
                     await context.sendActivity(`Hi ${userName}. You don't have any new notifications.`);
                     break;
                 case 'latest customer':
-                case 'latest cust':
                 case 'customer':
                     const customerService = new CustomerService();
                     const customer = await customerService.getLatestCustomer();
@@ -79,10 +78,12 @@ class BotActivityHandler extends TeamsActivityHandler {
 
 
     }
+    
     addConversationReference(activity) {
         const conversationReference = TurnContext.getConversationReference(activity);
         this.conversationReferences[conversationReference.conversation.id] = conversationReference;
     }
+
     async run(context) {
         await super.run(context);
 

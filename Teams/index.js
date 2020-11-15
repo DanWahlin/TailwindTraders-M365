@@ -77,7 +77,7 @@ server.post('/api/messages', (req, res) => {
 
 //Reference: https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-proactive-message?view=azure-bot-service-4.0&tabs=javascript
 
-server.get('/api/notify', async (req, res) => {
+server.post('/api/notify', async (req, res) => {
     for (const conversationReference of Object.values(conversationReferences)) {
         await adapter.continueConversation(conversationReference, async (context) => {
             // If you encounter permission-related errors when sending this message, see

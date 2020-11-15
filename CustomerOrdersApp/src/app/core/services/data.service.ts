@@ -6,6 +6,7 @@ import { map, catchError } from 'rxjs/operators';
 
 import { ICustomer, IOrder, IState, IPagedResults, IApiResponse, ISalesPerson } from '../../shared/interfaces';
 import { UtilitiesService } from './utilities.service';
+import { TeamsMessengerService } from './teams-messenger.service';
 
 @Injectable({ providedIn: 'root' })
 export class DataService {
@@ -16,7 +17,9 @@ export class DataService {
     states: IState[];
     salesPeople: ISalesPerson[];
 
-    constructor(private http: HttpClient, private utilitiesService: UtilitiesService) {  }
+    constructor(private http: HttpClient, 
+                private utilitiesService: UtilitiesService,
+                private teamsMessenger: TeamsMessengerService) {  }
 
     getCustomersPage(page: number, pageSize: number): Observable<IPagedResults<ICustomer[]>> {
         return this.http.get<ICustomer[]>(
@@ -62,7 +65,7 @@ export class DataService {
         return this.http.post<ICustomer>(this.customersBaseUrl, customer)
             .pipe(
                 map((customer: ICustomer) => {
-                    // Send a message to Teams here
+                    this.teamsMessenger.notifyCustomerChanged('inserted', customer.id);
                     return customer;
                 }),
                 catchError(this.handleError)
@@ -72,7 +75,10 @@ export class DataService {
     updateCustomer(customer: ICustomer): Observable<boolean> {
         return this.http.put<IApiResponse>(this.customersBaseUrl + '/' + customer.id, customer)
             .pipe(
-                map(res => res.status),
+                map(res => {
+                    this.teamsMessenger.notifyCustomerChanged('updated', customer.id);
+                    return res.status
+                }),
                 catchError(this.handleError)
             );
     }
@@ -80,7 +86,10 @@ export class DataService {
     deleteCustomer(id: number): Observable<boolean> {
         return this.http.delete<IApiResponse>(this.customersBaseUrl + '/' + id)
             .pipe(
-                map(res => res.status),
+                map(res => {
+                    this.teamsMessenger.notifyCustomerChanged('deleted', id);
+                    return res.status
+                }),
                 catchError(this.handleError)
             );
     }

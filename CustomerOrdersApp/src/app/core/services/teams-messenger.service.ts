@@ -2,19 +2,20 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { IApiResponse } from '../../shared/interfaces';
+import { IApiResponse, ICustomer } from '../../shared/interfaces';
 
 @Injectable({ providedIn: 'root' })
 export class TeamsMessengerService {
 
-    apiUrl = 'https://abc.ngrok.io/api/messages';
+    apiUrl = 'https://learntogetherbot.ngrok.io/api/notify';
 
     constructor(private http: HttpClient) { }
 
-    notifyCustomerUpdated(customerId: number): Observable<boolean> {
+    notifyCustomerChanged(changeType: string, customerId: number): Observable<boolean> {
         return this.http
             .post<IApiResponse>(this.apiUrl, {
-                customerId: customerId
+                changeType,
+                customerId
             })
             .pipe(
                 map(res => res.status),
