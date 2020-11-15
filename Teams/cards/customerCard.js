@@ -5,7 +5,7 @@ const AdaptiveCards = require('adaptivecards');
 // Function returns an adaptive card for a customer
 exports.getCard = function (customer) {
 
-    const card = JSON.parse(fs.readFileSync('./cards/card.json', 'utf-8'));
+    const card = JSON.parse(fs.readFileSync('./cards/customer-card.json', 'utf-8'));
 
     // Create a Template instance from the template
     const template = new ACData.Template(card);
