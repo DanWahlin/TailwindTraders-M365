@@ -36,7 +36,7 @@
   "staticTabs": [
     {
       "entityId": "index",
-      "name": "Personal Tab",
+      "name": "Customer App",
       "contentUrl": "https://learntogethercrm.ngrok.io/tab",
       "websiteUrl": "https://learntogethercrm.ngrok.io/tab",
       "scopes": [
