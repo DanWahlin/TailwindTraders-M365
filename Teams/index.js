@@ -1,17 +1,19 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
-const ACData = require('adaptivecards-templating'); 
-const AdaptiveCards = require('adaptivecards'); 
-const { CardFactory, TeamsInfo } = require('botbuilder');
+const ACData = require('adaptivecards-templating'),
+    AdaptiveCards = require('adaptivecards'),
+    { CardFactory, TeamsInfo } = require('botbuilder'),
 
-// Import required pckages
-const path = require('path');
-const express = require('express');
+    // Import required pckages
+    path = require('path'),
+    express = require('express');
+    bodyParser  = require('body-parser'),
 
-// Import required bot services.
-// See https://aka.ms/bot-services to learn more about the different parts of a bot.
-//const { BotFrameworkAdapter } = require('botbuilder');
-const { BotFrameworkAdapter, UserState, MemoryStorage } = require('botbuilder');
+    // Import required bot services.
+    // See https://aka.ms/bot-services to learn more about the different parts of a bot.
+    //const { BotFrameworkAdapter } = require('botbuilder');
+    { BotFrameworkAdapter, UserState, MemoryStorage } = require('botbuilder'),
+    CustomerService = require('./services/customers');
 
 // index.js is used to setup and configure your bot
 const memoryStorage = new MemoryStorage();
@@ -61,6 +63,18 @@ const botActivityHandler = new BotActivityHandler(userState,conversationReferenc
 
 // Create HTTP server.
 const server = express();
+
+server.use(bodyParser.urlencoded({ extended: true }));
+server.use(bodyParser.json());
+
+//CORS
+server.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, Authorization, X-Requested-With, X-XSRF-TOKEN, Content-Type, Accept");
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS');
+    next();
+});
+
 const port = process.env.port || process.env.PORT || 3978;
 server.listen(port, () => 
     console.log(`\Bot/ME service listening at https://localhost:${port}`)
@@ -68,7 +82,7 @@ server.listen(port, () =>
 
 // Listen for incoming requests.
 server.post('/api/messages', (req, res) => {
-    console.log('received message');
+    console.log('/api/messages called');
     adapter.processActivity(req, res, async (context) => {
         // Process bot activity
         await botActivityHandler.run(context);
@@ -76,143 +90,39 @@ server.post('/api/messages', (req, res) => {
 });
 
 //Reference: https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-proactive-message?view=azure-bot-service-4.0&tabs=javascript
-
 server.post('/api/notify', async (req, res) => {
+    console.log('/api/notify called: ', req.body);
     for (const conversationReference of Object.values(conversationReferences)) {
         await adapter.continueConversation(conversationReference, async (context) => {
+            
             // If you encounter permission-related errors when sending this message, see
             // https://aka.ms/BotTrustServiceUrl
            
             const userName = await TeamsInfo.getMembers(context,encodeURI(userInfo.id));
+            
+            const customerService = new CustomerService();
+            const customer = await customerService.getCustomer(req.body.customerId);
+            customer.changeType = getChangeType(req.body.changeType);
+            
+            const customerCard = require('./cards/customerCard');
+            const card = customerCard.getCard(customer);
+            await context.sendActivity({ attachments: [CardFactory.adaptiveCard(card)] });           
 
-            
-            var CustomerLoad = 
-                {
-                    "type": "AdaptiveCard",
-                    "body": [
-                        {
-                            "type": "TextBlock",
-                            "size": "Large",
-                            "weight": "Bolder",
-                            "text": "You are assigned to a new customer!"
-                        },
-                        {
-                            "type": "TextBlock",
-                            "size": "Default",
-                            "weight": "Default",
-                            "text": "Get to know your customer, here is some details."
-                        },
-                        {
-                            "type": "ColumnSet",
-                            "columns": [
-                                {
-                                    "type": "Column",
-                                    "items": [
-                                        {
-                                            "type": "Image",
-                                            "style": "Person",
-                                            "url": "${profileImage}",
-                                            "size": "Small"
-                                        }
-                                    ],
-                                    "width": "auto"
-                                },
-                                {
-                                    "type": "Column",
-                                    "items": [
-                                        {
-                                            "type": "TextBlock",
-                                            "weight": "Bolder",
-                                            "size":"Medium",
-                                            "text": "${firstName} ${lastName}",
-                                            "wrap": true
-                                        },
-                                        {
-                                            "type": "TextBlock",
-                                            "spacing": "None",
-                                            "text": "${address}, ${city}",
-                                            "isSubtle": true,
-                                            "wrap": true
-                                        },
-                                        {
-                                            "type": "TextBlock",
-                                            "spacing": "None",
-                                            "text": "${name}, ${abbreviation}",
-                                            "$data":"${state}",
-                                            "isSubtle": true,
-                                            "wrap": true
-                                        }
-                                    ],
-                                    "width": "stretch"
-                                }
-                            ]
-                        },
-                        {
-                            "type": "TextBlock",
-                            "text": "Recent Orders:",
-                            "weight": "Bolder",
-                            "wrap": true
-                        },
-                        {
-                            "type": "FactSet",
-                            "weight": "Default",
-                            "facts": [
-                                {
-                                    "$data": "${orders}",
-                                    "title": "${productName}: $ ${itemCost}",
-                                    "value": "${itemCost}"
-                                }
-                            ]
-                        }
-                    ],
-                    "actions": [
-                       
-                        {
-                            "type": "Action.OpenUrl",
-                            "title": "View more details",
-                            "url": "${viewUrl}"
-                        }
-                    ],
-                    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-                    "version": "1.3"
-                };
-           
-            // Create a Template instance from the template
-            var template = new ACData.Template(CustomerLoad);
-            
-            // Expand the template with your `$root` data object.
-            // This binds it to the data and produces the final Adaptive Card payload
-            var ManagerCardLoad = template.expand({
-             $root:     {
-                "id": 1,
-                "firstName": "Ted",
-                "lastName": "James",
-                "profileImage":"https://pbs.twimg.com/profile_images/3647943215/d7f12830b3c17a5a9e4afcc370e3a37e_400x400.jpeg",
-                "gender": "male",
-                "address": "1234 Anywhere St.",
-                "city": " Phoenix ",
-                "state": {
-                  "abbreviation": "AZ",
-                  "name": "Arizona"
-                },
-                "orders": [
-                  { "productName": "Basketball", "itemCost": 7.99 },
-                  { "productName": "Shoes", "itemCost": 199.99 }
-                ],
-                "latitude": 33.299,
-                "longitude": -111.963
-              }
-              
-            });
-            var adaptiveCard = new AdaptiveCards.AdaptiveCard();
-            adaptiveCard.parse(ManagerCardLoad);
-            
-            await context.sendActivity({ attachments: [CardFactory.adaptiveCard(adaptiveCard)] });
         });
     }
 
-    res.setHeader('Content-Type', 'text/html');
-    res.writeHead(200);
-    res.write('<html><body><h1>Proactive messages have been sent.</h1></body></html>');
-    res.end();
+    res.json(req.body);
 });
+
+function getChangeType(changeType) {
+    switch (changeType) {
+        case 'Insert':
+            return 'New ';
+        case 'Update':
+            return 'Updated ';
+        case 'Delete':
+            return 'Deleted ';
+        default:
+            return '';
+    }
+}

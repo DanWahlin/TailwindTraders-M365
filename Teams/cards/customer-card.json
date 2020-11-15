@@ -7,7 +7,7 @@
             "type": "TextBlock",
             "size": "Medium",
             "weight": "Bolder",
-            "text": "New Customer",
+            "text": "${$root.changeType} Customer",
             "wrap": true
         },
         {

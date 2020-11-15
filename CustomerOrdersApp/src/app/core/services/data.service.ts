@@ -7,6 +7,7 @@ import { map, catchError } from 'rxjs/operators';
 import { ICustomer, IOrder, IState, IPagedResults, IApiResponse, ISalesPerson } from '../../shared/interfaces';
 import { UtilitiesService } from './utilities.service';
 import { TeamsMessengerService } from './teams-messenger.service';
+import { CustomerChangeType } from 'src/app/shared/enums';
 
 @Injectable({ providedIn: 'root' })
 export class DataService {
@@ -65,7 +66,8 @@ export class DataService {
         return this.http.post<ICustomer>(this.customersBaseUrl, customer)
             .pipe(
                 map((customer: ICustomer) => {
-                    this.teamsMessenger.notifyCustomerChanged('inserted', customer.id);
+                    // Send notification to Teams bot
+                    this.teamsMessenger.notifyCustomerChanged(CustomerChangeType.Insert, customer.id).subscribe();
                     return customer;
                 }),
                 catchError(this.handleError)
@@ -76,7 +78,8 @@ export class DataService {
         return this.http.put<IApiResponse>(this.customersBaseUrl + '/' + customer.id, customer)
             .pipe(
                 map(res => {
-                    this.teamsMessenger.notifyCustomerChanged('updated', customer.id);
+                    // Send notification to Teams bot
+                    this.teamsMessenger.notifyCustomerChanged(CustomerChangeType.Update, customer.id).subscribe();
                     return res.status
                 }),
                 catchError(this.handleError)
@@ -87,7 +90,8 @@ export class DataService {
         return this.http.delete<IApiResponse>(this.customersBaseUrl + '/' + id)
             .pipe(
                 map(res => {
-                    this.teamsMessenger.notifyCustomerChanged('deleted', id);
+                    // Send notification to Teams bot
+                    this.teamsMessenger.notifyCustomerChanged(CustomerChangeType.Delete, id).subscribe();
                     return res.status
                 }),
                 catchError(this.handleError)

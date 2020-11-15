@@ -12,11 +12,9 @@ exports.getCard = function (customer) {
 
     // Expand the template with your `$root` data object.
     // This binds it to the data and produces the final Adaptive Card payload
-    const ManagerCardLoad = template.expand({
-        $root: customer
-    });
-
+    const ManagerCardLoad = template.expand({ $root: customer });
     const adaptiveCard = new AdaptiveCards.AdaptiveCard();
     adaptiveCard.parse(ManagerCardLoad);
+    
     return adaptiveCard;
 }

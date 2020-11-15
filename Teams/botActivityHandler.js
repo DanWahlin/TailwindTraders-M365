@@ -61,6 +61,7 @@ class BotActivityHandler extends TeamsActivityHandler {
                 case 'customer':
                     const customerService = new CustomerService();
                     const customer = await customerService.getLatestCustomer();
+                    customer.changeType = 'Latest ';
                     const customerCard = require('./cards/customerCard');
                     const card = customerCard.getCard(customer);
                     await context.sendActivity({ attachments: [CardFactory.adaptiveCard(card)] });
@@ -78,7 +79,7 @@ class BotActivityHandler extends TeamsActivityHandler {
 
 
     }
-    
+
     addConversationReference(activity) {
         const conversationReference = TurnContext.getConversationReference(activity);
         this.conversationReferences[conversationReference.conversation.id] = conversationReference;

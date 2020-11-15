@@ -89,7 +89,7 @@ app.get('/api/customers/:id', (req, res) => {
 
 app.post('/api/customers', (req, res) => {
     const postedCustomer = req.body;
-    const maxId = Math.max.apply(Math,customers.map((cust) => cust.id));
+    let maxId = Math.max.apply(Math,customers.map((cust) => cust.id));
     postedCustomer.id = ++maxId;
     postedCustomer.gender = (postedCustomer.id % 2 === 0) ? 'female' : 'male';
     customers.push(postedCustomer);
