@@ -30,6 +30,7 @@
                     "items": [
                         {
                             "type": "TextBlock",
+                            "size": "Medium",
                             "weight": "Bolder",
                             "text": "${$root.firstName} ${$root.lastName}",
                             "wrap": true
@@ -61,6 +62,7 @@
         },
         {
             "type": "Image",
+            "$when": "${$root.latitude != ''}",
             "url": "https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/${$root.latitude},${$root.longitude}/4?&pp=${$root.latitude},${$root.longitude}&key=At1jz5shJJehBl94CpvgIIdaqVGcpOGfpkpU2nU4rRl3sV1MxWVMVYX92kXoLg5i"
         }
     ],
