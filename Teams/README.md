@@ -36,6 +36,10 @@ Run ngrok - point to port 3978
 ### `npm start`
 
 ## Deploy to Teams
-Start debugging the project by hitting the `F5` key or click the debug icon in Visual Studio Code and click the `Start Debugging` green arrow button.
+Start debugging the project by hitting the `F5` key or click the debug icon in Visual Studio Code and click the `Start Debugging` green arrow button.'
+
+## Generate Teams App Package
+
+Run `npm run build:zip`. Package will be added to the `package` folder.
 
 
