@@ -2,11 +2,7 @@
 // Licensed under the MIT License.
 const ACData = require('adaptivecards-templating'); 
 const AdaptiveCards = require('adaptivecards'); 
-const {
-   
-    CardFactory, TeamsInfo,
-    
-} = require('botbuilder');
+const { CardFactory, TeamsInfo } = require('botbuilder');
 
 // Import required pckages
 const path = require('path');
@@ -39,6 +35,8 @@ const adapter = new BotFrameworkAdapter({
     appPassword: process.env.BotPassword
 });
 
+console.log('BotId', process.env.BotPassword);
+
 adapter.onTurnError = async (context, error) => {
     // This check writes out errors to console log .vs. app insights.
     // NOTE: In production environment, you should consider logging this to Azure
@@ -70,6 +68,7 @@ server.listen(port, () =>
 
 // Listen for incoming requests.
 server.post('/api/messages', (req, res) => {
+    console.log('received message');
     adapter.processActivity(req, res, async (context) => {
         // Process bot activity
         await botActivityHandler.run(context);
