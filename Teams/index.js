@@ -104,6 +104,7 @@ server.post('/api/notify', async (req, res) => {
             const userName = await TeamsInfo.getMembers(context,encodeURI(userInfo.id));
             console.log('Sending customer card for /api/notify');
             let customer = req.body.customer;
+            
             if (customer) {
                 customer.changeType = getChangeType(req.body.changeType);  
                 const teamsUrl = encodeURI(
