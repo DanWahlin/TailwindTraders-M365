@@ -107,7 +107,7 @@ export class CustomerEditComponent implements OnInit {
 
   delete(event: Event) {
     event.preventDefault();
-    this.dataService.deleteCustomer(this.customer.id)
+    this.dataService.deleteCustomer(this.customer)
       .subscribe((status: boolean) => {
         if (status) {
           this.router.navigate(['/customers']);

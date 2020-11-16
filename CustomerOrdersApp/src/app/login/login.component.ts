@@ -61,7 +61,13 @@ export class LoginComponent implements OnInit {
     }
 
     navigate() {
-      this.router.navigate(['/']);
+      // See if deep linking in Teams sent a subEntityId for the customer to show
+      if (this.teamsAuthService.subEntityId) {
+        this.router.navigate(['/customers', this.teamsAuthService.subEntityId, 'details']);
+      }
+      else {
+        this.router.navigate(['/']);
+      }
     }
   
 }

@@ -4,18 +4,20 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { CustomerChangeType } from 'src/app/shared/enums';
 import { IApiResponse, ICustomer } from '../../shared/interfaces';
+import { TeamsAuthService } from './teams-auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class TeamsMessengerService {
 
     apiUrl = 'https://learntogetherbot.ngrok.io/api/notify';
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private teamsAuthService: TeamsAuthService) { }
 
-    notifyCustomerChanged(changeType: CustomerChangeType, customerId: number): Observable<IApiResponse> {
+    notifyCustomerChanged(changeType: CustomerChangeType, customer: ICustomer): Observable<IApiResponse> {
         const change = {
             changeType: CustomerChangeType[changeType],
-            customerId
+            channelId: this.teamsAuthService.channelId,
+            customer
         };
         console.log(change);
         return this.http.post<IApiResponse>(this.apiUrl, change)

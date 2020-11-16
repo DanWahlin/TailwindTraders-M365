@@ -70,7 +70,7 @@
         {
             "type": "Action.OpenUrl",
             "title": "Customer Details",
-            "url": "https://learntogethercrm.ngrok.io/customers/${$root.id}/details"
+            "url": "${$root.customerUrl}"
         }
     ]
 }

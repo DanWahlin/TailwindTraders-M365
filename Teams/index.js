@@ -12,8 +12,7 @@ const ACData = require('adaptivecards-templating'),
     // Import required bot services.
     // See https://aka.ms/bot-services to learn more about the different parts of a bot.
     //const { BotFrameworkAdapter } = require('botbuilder');
-    { BotFrameworkAdapter, UserState, MemoryStorage } = require('botbuilder'),
-    CustomerService = require('./services/customers');
+    { BotFrameworkAdapter, UserState, MemoryStorage } = require('botbuilder');
 
 // index.js is used to setup and configure your bot
 const memoryStorage = new MemoryStorage();
@@ -25,6 +24,7 @@ const conversationReferences = {};
 // Import bot definitions
 const BotActivityHandler = require('./botActivityHandler');
 const { userInfo } = require('os');
+const CustomerService = require('./services/customers');
 
 // Read botFilePath and botFileSecret from .env file.
 const ENV_FILE = path.join(__dirname, '.env');
@@ -91,22 +91,37 @@ server.post('/api/messages', (req, res) => {
 
 //Reference: https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-proactive-message?view=azure-bot-service-4.0&tabs=javascript
 server.post('/api/notify', async (req, res) => {
-    console.log('/api/notify called: ', req.body);
     for (const conversationReference of Object.values(conversationReferences)) {
         await adapter.continueConversation(conversationReference, async (context) => {
             
             // If you encounter permission-related errors when sending this message, see
             // https://aka.ms/BotTrustServiceUrl
+
+            // // https://teams.microsoft.com/l/entity/<appId>/index?label=Vi32&context=<context>
+
+            // Build a deep link to the current user tab and customer
+
            
             const userName = await TeamsInfo.getMembers(context,encodeURI(userInfo.id));
-            
-            const customerService = new CustomerService();
-            const customer = await customerService.getCustomer(req.body.customerId);
-            customer.changeType = getChangeType(req.body.changeType);
-            
-            const customerCard = require('./cards/customerCard');
-            const card = customerCard.getCard(customer);
-            await context.sendActivity({ attachments: [CardFactory.adaptiveCard(card)] });           
+            console.log('Sending customer card for /api/notify');
+            let customer = req.body.customer;
+            if (customer) {
+                customer.changeType = getChangeType(req.body.changeType);  
+                const teamsUrl = encodeURI(
+                    'https://teams.microsoft.com/l/entity/' +
+                    process.env.AppId + '/' +
+                    process.env.EntityId +
+                    '?label=Vi32&' +
+                    `context={"subEntityId": "${customer.id}", "channelId": "${req.body.channelId}" }`);
+                customer.customerUrl = teamsUrl;
+                console.log('Deep linking Url: ', teamsUrl);
+
+                const customerService = new CustomerService();
+                customer = await customerService.getCustomerSalesPerson(customer);              
+                const customerCard = require('./cards/customerCard');
+                const card = customerCard.getCard(customer);
+                await context.sendActivity({ attachments: [CardFactory.adaptiveCard(card)] });          
+            } 
 
         });
     }

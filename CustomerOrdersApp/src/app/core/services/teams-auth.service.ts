@@ -10,6 +10,8 @@ import { AADAuthService } from './aad-auth.service';
 export class TeamsAuthService {
     loggedIn = false;
     initialized = false;
+    subEntityId: string;
+    channelId: string;
 
     constructor(private aadAuthService: AADAuthService) { }
 
@@ -27,7 +29,10 @@ export class TeamsAuthService {
                     microsoftTeams.getContext(async context => {
                         clearTimeout(teamsCheckTimeout);
                         if (context) {
+                            this.channelId = context.channelId;
+                            this.subEntityId = context.subEntityId;
                             console.log('Teams context', context);
+                            
                             // In-line code
                             const clientSideToken = await this.getClientSideToken();
                             try {

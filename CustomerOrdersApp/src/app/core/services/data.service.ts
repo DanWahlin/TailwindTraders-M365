@@ -67,7 +67,7 @@ export class DataService {
             .pipe(
                 map((customer: ICustomer) => {
                     // Send notification to Teams bot
-                    this.teamsMessenger.notifyCustomerChanged(CustomerChangeType.Insert, customer.id).subscribe();
+                    this.teamsMessenger.notifyCustomerChanged(CustomerChangeType.Insert, customer).subscribe();
                     return customer;
                 }),
                 catchError(this.handleError)
@@ -79,19 +79,19 @@ export class DataService {
             .pipe(
                 map(res => {
                     // Send notification to Teams bot
-                    this.teamsMessenger.notifyCustomerChanged(CustomerChangeType.Update, customer.id).subscribe();
+                    this.teamsMessenger.notifyCustomerChanged(CustomerChangeType.Update, customer).subscribe();
                     return res.status
                 }),
                 catchError(this.handleError)
             );
     }
 
-    deleteCustomer(id: number): Observable<boolean> {
-        return this.http.delete<IApiResponse>(this.customersBaseUrl + '/' + id)
+    deleteCustomer(customer: ICustomer): Observable<boolean> {
+        return this.http.delete<IApiResponse>(this.customersBaseUrl + '/' + customer.id)
             .pipe(
                 map(res => {
                     // Send notification to Teams bot
-                    this.teamsMessenger.notifyCustomerChanged(CustomerChangeType.Delete, id).subscribe();
+                    this.teamsMessenger.notifyCustomerChanged(CustomerChangeType.Delete, customer).subscribe();
                     return res.status
                 }),
                 catchError(this.handleError)
