@@ -100,7 +100,6 @@ server.post('/api/notify', async (req, res) => {
             // // https://teams.microsoft.com/l/entity/<appId>/index?label=Vi32&context=<context>
 
             // Build a deep link to the current user tab and customer
-
            
             const userName = await TeamsInfo.getMembers(context,encodeURI(userInfo.id));
             console.log('Sending customer card for /api/notify');

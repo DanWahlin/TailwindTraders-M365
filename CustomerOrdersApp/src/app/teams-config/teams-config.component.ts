@@ -20,7 +20,7 @@ export class TeamsConfigComponent implements OnInit {
           // what the user configured on this page
           microsoftTeams.settings.setSettings({
               contentUrl: tabUrl, // Mandatory parameter
-              entityId: tabUrl    // Mandatory parameter
+              entityId: 'index'    // Should match the staticTabs.entityId in the Teams app manifest
           });
 
           // Tells Microsoft Teams platform that we are done saving our settings. Microsoft Teams waits
