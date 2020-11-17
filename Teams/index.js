@@ -104,17 +104,23 @@ server.post('/api/notify', async (req, res) => {
             const userName = await TeamsInfo.getMembers(context,encodeURI(userInfo.id));
             console.log('Sending customer card for /api/notify');
             let customer = req.body.customer;
-            
+
             if (customer) {
                 customer.changeType = getChangeType(req.body.changeType);  
-                const teamsUrl = encodeURI(
-                    'https://teams.microsoft.com/l/entity/' +
-                    process.env.AppId + '/' +
-                    process.env.EntityId +
-                    '?label=Vi32&' +
-                    `context={"subEntityId": "${customer.id}", "channelId": "${req.body.channelId}" }`);
-                customer.customerUrl = teamsUrl;
-                console.log('Deep linking Url: ', teamsUrl);
+                customer.customerUrl = '';
+                console.log("Change type: ", req.body.changeType);
+
+                // Add deep link for Insert/Update changes so user can click to see customer
+                if (req.body.changeType !== 'Delete') {
+                    const teamsUrl = encodeURI(
+                        'https://teams.microsoft.com/l/entity/' +
+                        process.env.AppId + '/' +
+                        process.env.EntityId +
+                        '?label=Vi32&' +
+                        `context={"subEntityId": "${customer.id}", "channelId": "${req.body.channelId}" }`);
+                    customer.customerUrl = teamsUrl;
+                    console.log('Deep linking Url: ', teamsUrl);
+                }
 
                 const customerService = new CustomerService();
                 customer = await customerService.getCustomerSalesPerson(customer);              

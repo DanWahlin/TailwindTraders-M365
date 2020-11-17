@@ -69,6 +69,7 @@
     "actions": [
         {
             "type": "Action.OpenUrl",
+            "$when": "${$root.customerUrl != ''}",
             "title": "Customer Details",
             "url": "${$root.customerUrl}"
         }
