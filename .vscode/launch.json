@@ -2,11 +2,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Attach to Node Functions",
-            "type": "node",
-            "request": "attach",
+            "name": "Attach",
             "port": 9229,
-            "preLaunchTask": "func: host start"
+            "request": "attach",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "pwa-node"
         }
     ]
 }

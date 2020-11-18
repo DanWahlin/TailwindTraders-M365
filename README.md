@@ -1,44 +1,14 @@
-# Tailwind Traders M365
+# Tailwind Traders Teams App
 
+Prerequisites:
 
-## Running the Application
+- [Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli)
+- [PowerShell](https://docs.microsoft.com/powershell/scripting/install/installing-powershell?view=powershell-7.1)
+- [Microsoft 365 tenant](https://developer.microsoft.com/microsoft-365/dev-program)
 
-Clone the project or download and extract the .zip to get started. 
+Login to Azure:
 
-1. Install the latest LTS version of [Node.js](https://nodejs.org). 
-
-    *IMPORTANT: The server uses ES2015 features so you need a current version of Node.js.*
-
-1. Open a terminal window and run the following commands to install dependencies, build the code, and start the server:
-
-    ```
-    npm install
-    npm run build
-    npm start
-    ```
-
-1. Run `ngrok http -subdomain=<your-subdomain>.ngrok.io 8080` to launch ngrok (assumes ngrok basic or higher with custom subdomain support).
-
-1. Go to http://<your-subdomain>.ngrok.io:8080 in your browser.
-
-## Modifying the Code
-
-1. If you'd like to modify the code you'll need the build process to rebuild the code after any changes that you make. To do that you can run:
-
-    ```
-    npm install
-    npm run build:watch
-    ```
-
-1. Open another command window and run:
-
-    ```
-    npm start
-    ```
-
-1. Run `ngrok http -subdomain=<your-subdomain>.ngrok.io 8080` to launch ngrok (assumes ngrok basic or higher with custom subdomain support).
-
-1. Go to http://<your-subdomain>.ngrok.io:8080 in your browser.
-
-Note: The `npm run build:watch` command will rebuild your code when a file changes but you'll need to refresh your browser to see the changes.
+```powershell
+az login --tenant <REPLACE_WITH_TENANT_NAME_OR_ID> --allow-no-subscriptions
+```
 
