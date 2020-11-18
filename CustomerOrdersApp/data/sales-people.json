@@ -37,14 +37,14 @@
     },
     {
         "id": 4,
-        "firstName": "Don",
-        "lastName": "Johnson",
+        "firstName": "Bob",
+        "lastName": "German",
         "gender": "male",
-        "address": "1850 Long Bay Dr.",
-        "city": "Seattle",
+        "address": "5 Wayside Rd.",
+        "city": "Burlington",
         "state": {
-            "abbreviation": "WA",
-            "name": "Washington"
+            "abbreviation": "MA",
+            "name": "Massachusetts"
         }
     },
     {
@@ -57,6 +57,18 @@
         "state": {
             "abbreviation": "TN",
             "name": "Tennessee"
+        }
+    },
+    {
+        "id": 6,
+        "firstName": "Don",
+        "lastName": "Johnson",
+        "gender": "male",
+        "address": "1850 Long Bay Dr.",
+        "city": "Seattle",
+        "state": {
+            "abbreviation": "WA",
+            "name": "Washington"
         }
     }
 ]

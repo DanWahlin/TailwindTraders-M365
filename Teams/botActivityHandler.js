@@ -52,6 +52,7 @@ class BotActivityHandler extends TeamsActivityHandler {
 
             const text = context.activity.text.toLowerCase();
             console.log('Message received: ', text);
+            const customerService = new CustomerService();
             switch (text) {
                 case 'hello':
                 case 'hi':
@@ -59,12 +60,20 @@ class BotActivityHandler extends TeamsActivityHandler {
                     break;
                 case 'latest customer':
                 case 'customer':
-                    const customerService = new CustomerService();
                     const customer = await customerService.getLatestCustomer();
                     customer.changeType = 'Latest ';
                     const customerCard = require('./cards/customerCard');
                     const card = customerCard.getCard(customer);
                     await context.sendActivity({ attachments: [CardFactory.adaptiveCard(card)] });
+                    break;
+                case 'get my customers':
+                    const customers = await customerService.getCustomersBySalesPerson(userName);
+                    let responseText = `I found ${customers.length} customers for ${userName}:<br /><ul>`;
+                    customers.forEach((customer) => {
+                        responseText += `<li>${customer.firstName} ${customer.lastName} ${customer.address}, ${customer.city} ${customer.state.abbreviation}</li>`;
+                    })
+                    responseText += `</ul>`;
+                    await context.sendActivity(responseText);
                     break;
                 case 'intro':
                 case 'help':

@@ -32,20 +32,23 @@ class CustomerService {
     }
 
     async getCustomersBySalesPerson(salesPersonName) {
+        let result = [];
         if (salesPersonName) {
             // If salesPersonName == Burke Holland
             // Example: https://learntogethercrm.ngrok.io/api/customersBySalesPerson/Burke%20Holland
-            const customers = await this.getJson(`/api/customersBySalesPerson/${salesPersonName}'`);
-            for (let cust of customers) {
-                cust.salesPerson = salesPersonName;
+            const url = `/api/customersBySalesPerson/${encodeURI(salesPersonName)}`;
+            const customers = await this.getJson(url);
+            if (customers) {
+                for (let cust of customers) {
+                    cust.salesPerson = salesPersonName;
+                }
+                result = customers;
             }
-            return customers;
         }
-        return null;
+        return result;
     }
 
     async getJson(apiUrl) {
-        let result;
         try {
             // Checking port since if ngrok is used and port is 80 we don't want to add it (will break)
             const port = (process.env.CrmPort === '80') ? '' : `:${process.env.CrmPort}`;
@@ -54,20 +57,20 @@ class CustomerService {
                 method: "GET",
                 headers: { Accept: "application/json" }
             });
-    
-            console.log (`Received ${apiUrl} data with status code ${response.status}`);
-    
+
+            console.log(`Received ${apiUrl} data with status code ${response.status}`);
+
             if (response.status !== 200) {
                 throw `Response error ${response.status}: ${response.statusText}`;
             }
 
-            const result = await response.json();   
-            return result; 
+            const result = await response.json();
+            return result;
         }
         catch (error) {
             console.log(error);
         }
-        
+
         return null;
     }
 }
