@@ -128,11 +128,17 @@ class BotActivityHandler extends TeamsActivityHandler {
             break;
         case 'Customers':
             const customers = await customerService.getCustomersBySalesPerson(userName);
-            let responseText = `I found ${customers.length} customers for ${userName}:<br /><ul>`;
-            customers.forEach((customer) => {
-                responseText += `<li>${customer.firstName} ${customer.lastName} ${customer.address}, ${customer.city} ${customer.state.abbreviation}</li>`;
-            })
-            responseText += `</ul>`;
+            let responseText;
+            if (customers.length === 0) {
+                responseText = `<b>You don't have any customers.</b>`;
+            }
+            else {
+                responseText = `<b>Your list of customers</b><br /><br /><table>`;
+                customers.forEach((customer) => {
+                    responseText += `<tr><td style="font-weight: bold; padding-right: 6pt;"><a href="https://www.microsoft.com">${customer.firstName} ${customer.lastName}</a></td><td>${customer.address}, ${customer.city} ${customer.state.abbreviation}</td></tr>`;
+                })
+                responseText += `</table>`;
+            }
             await context.sendActivity(responseText);
             break;
         case 'LatestCustomer':
