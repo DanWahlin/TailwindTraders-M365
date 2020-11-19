@@ -19,6 +19,9 @@ const msalProviders = (!isIFrame) ? {
   multi: true
 } : [];
 
+const port = (window.location.port) ? ':' + window.location.port : '';
+const url = `${window.location.protocol}//${window.location.hostname}${port}`;
+
 @NgModule({
   imports: [
     CommonModule, RouterModule, HttpClientModule, GrowlerModule, ModalModule, OverlayModule,
@@ -26,7 +29,7 @@ const msalProviders = (!isIFrame) ? {
       auth: {
         clientId: 'a1695d4d-84c0-4750-be9b-e049c9c68f19',
         authority: 'https://login.microsoftonline.com/organizations',
-        redirectUri: 'https://learntogethercrm.ngrok.io'
+        redirectUri: url
       },
       cache: {
         cacheLocation: 'localStorage',
