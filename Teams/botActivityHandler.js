@@ -135,7 +135,13 @@ class BotActivityHandler extends TeamsActivityHandler {
             else {
                 responseText = `<b>Your list of customers</b><br /><br /><table>`;
                 customers.forEach((customer) => {
-                    responseText += `<tr><td style="font-weight: bold; padding-right: 6pt;"><a href="https://www.microsoft.com">${customer.firstName} ${customer.lastName}</a></td><td>${customer.address}, ${customer.city} ${customer.state.abbreviation}</td></tr>`;
+                    responseText += `
+                    <tr>
+                        <td style="font-weight: bold; padding-right: 6pt;">
+                            <a href="https://www.microsoft.com">${customer.firstName} ${customer.lastName}</a>
+                        </td>
+                        <td>${customer.address}, ${customer.city} ${customer.state.abbreviation}</td>
+                    </tr>`;
                 })
                 responseText += `</table>`;
             }
