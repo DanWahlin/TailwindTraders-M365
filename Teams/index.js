@@ -90,50 +90,51 @@ server.post('/api/messages', (req, res) => {
 });
 
 //Reference: https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-proactive-message?view=azure-bot-service-4.0&tabs=javascript
-// server.post('/api/notify', async (req, res) => {
-//     for (const conversationReference of Object.values(conversationReferences)) {
-//         await adapter.continueConversation(conversationReference, async (context) => {
+// Used by Customer/Orders App to send update/delete/insert update notifications
+server.post('/api/notify', async (req, res) => {
+    for (const conversationReference of Object.values(conversationReferences)) {
+        await adapter.continueConversation(conversationReference, async (context) => {
             
-//             // If you encounter permission-related errors when sending this message, see
-//             // https://aka.ms/BotTrustServiceUrl
+            // If you encounter permission-related errors when sending this message, see
+            // https://aka.ms/BotTrustServiceUrl
 
-//             // // https://teams.microsoft.com/l/entity/<appId>/index?label=Vi32&context=<context>
+            // // https://teams.microsoft.com/l/entity/<appId>/index?label=Vi32&context=<context>
 
-//             // Build a deep link to the current user tab and customer
+            // Build a deep link to the current user tab and customer
            
-//             const userName = await TeamsInfo.getMembers(context,encodeURI(userInfo.id));
-//             console.log('Sending customer card for /api/notify');
-//             let customer = req.body.customer;
+            const userName = await TeamsInfo.getMembers(context,encodeURI(userInfo.id));
+            console.log('Sending customer card for /api/notify');
+            let customer = req.body.customer;
 
-//             if (customer) {
-//                 customer.changeType = getChangeType(req.body.changeType);  
-//                 customer.customerUrl = '';
-//                 console.log("Change type: ", req.body.changeType);
+            if (customer) {
+                customer.changeType = getChangeType(req.body.changeType);  
+                customer.customerUrl = '';
+                console.log("Change type: ", req.body.changeType);
 
-//                 // Add deep link for Insert/Update changes so user can click to see customer
-//                 if (req.body.changeType !== 'Delete') {
-//                     const teamsUrl = encodeURI(
-//                         'https://teams.microsoft.com/l/entity/' +
-//                         process.env.AppId + '/' +
-//                         process.env.EntityId +
-//                         '?label=Vi32&' +
-//                         `context={"subEntityId": "${customer.id}", "channelId": "${req.body.channelId}" }`);
-//                     customer.customerUrl = teamsUrl;
-//                     console.log('Deep linking Url: ', teamsUrl);
-//                 }
+                // Add deep link for Insert/Update changes so user can click to see customer
+                if (req.body.changeType !== 'Delete') {
+                    const teamsUrl = encodeURI(
+                        'https://teams.microsoft.com/l/entity/' +
+                        process.env.AppId + '/' +
+                        process.env.EntityId +
+                        '?label=Vi32&' +
+                        `context={"subEntityId": "${customer.id}", "channelId": "${req.body.channelId}" }`);
+                    customer.customerUrl = teamsUrl;
+                    console.log('Deep linking Url: ', teamsUrl);
+                }
 
-//                 const customerService = new CustomerService();
-//                 customer = await customerService.getCustomerSalesPerson(customer);              
-//                 const customerCard = require('./cards/customerCard');
-//                 const card = customerCard.getCard(customer);
-//                 await context.sendActivity({ attachments: [CardFactory.adaptiveCard(card)] });          
-//             } 
+                const customerService = new CustomerService();
+                customer = await customerService.getCustomerSalesPerson(customer);              
+                const customerCard = require('./cards/customerCard');
+                const card = customerCard.getCard(customer);
+                await context.sendActivity({ attachments: [CardFactory.adaptiveCard(card)] });          
+            } 
 
-//         });
-//     }
+        });
+    }
 
-//     res.json(req.body);
-// });
+    res.json(req.body);
+});
 
 function getChangeType(changeType) {
     switch (changeType) {
