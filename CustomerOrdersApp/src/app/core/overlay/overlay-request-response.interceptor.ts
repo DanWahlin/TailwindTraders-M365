@@ -26,6 +26,7 @@ export class OverlayRequestResponseInterceptor implements HttpInterceptor {
               }
             }),
             catchError(err => {
+              console.log(err);
               this.eventBus.emit(new EmitEvent(Events.httpResponse));
               return of(null);
             })

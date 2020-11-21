@@ -79,18 +79,19 @@ export class AADAuthService implements OnDestroy {
 
     async login() {
         const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
+        const authParams = {
+            scopes: [
+                'user.read',
+                'openid',
+                'profile',
+            ]
+        };
 
         if (isIE) {
-            this.msalAuthService.loginRedirect();
+            this.msalAuthService.loginRedirect(authParams);
         } else {
             // msal events above will fire based on success or failure
-            await this.msalAuthService.loginPopup({
-                scopes: [
-                    'user.read',
-                    'openid',
-                    'profile',
-                ]
-            });
+            await this.msalAuthService.loginPopup(authParams);
         }
     }
 
