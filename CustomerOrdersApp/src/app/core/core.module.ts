@@ -43,7 +43,6 @@ const url = `${window.location.protocol}//${window.location.hostname}${port}`;
         'openid',
         'profile',
       ],
-      unprotectedResources: [],
       protectedResourceMap: [
         ['https://graph.microsoft.com/v1.0/me', ['user.read']]
       ],
