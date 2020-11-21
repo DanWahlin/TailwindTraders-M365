@@ -90,7 +90,9 @@ server.post('/api/messages', (req, res) => {
 //Reference: https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-proactive-message?view=azure-bot-service-4.0&tabs=javascript
 // Used by Customer/Orders App to send update/delete/insert update notifications
 server.post('/api/notify', async (req, res) => {
-    console.log('/api/notify called');
+    if (conversationReferences && Object.keys(conversationReferences).length === 0) {
+        console.log('\n RESTART BOT SERVER to hook up conversationReferences');
+    }
     
     for (const conversationReference of Object.values(conversationReferences)) {
         await adapter.continueConversation(conversationReference, async (context) => {
