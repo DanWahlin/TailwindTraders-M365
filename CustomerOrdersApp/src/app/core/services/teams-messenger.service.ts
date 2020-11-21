@@ -9,18 +9,18 @@ import { TeamsAuthService } from './teams-auth.service';
 @Injectable({ providedIn: 'root' })
 export class TeamsMessengerService {
 
-    apiUrl = 'https://learntogetherbot.ngrok.io/api/notify';
+    botApiUrl = 'https://learntogetherbot.ngrok.io/';
 
     constructor(private http: HttpClient, private teamsAuthService: TeamsAuthService) { }
 
     notifyCustomerChanged(changeType: CustomerChangeType, customer: ICustomer): Observable<IApiResponse> {
         const change = {
             changeType: CustomerChangeType[changeType],
-            channelId: this.teamsAuthService.channelId,
-            customer
+            customer,
+            // channelId: this.teamsAuthService.channelId
         };
-        console.log(change);
-        return this.http.post<IApiResponse>(this.apiUrl, change)
+
+        return this.http.post<IApiResponse>(this.botApiUrl + 'api/notify', change)
             .pipe(
                 map(res => {
                     console.log('notifyCustomerChanged called: ', change);
@@ -28,6 +28,17 @@ export class TeamsMessengerService {
                 }),
                 catchError(this.handleError)
             );
+    }
+
+    sendChannelId(channelId: string) {
+        return this.http.post<IApiResponse>(this.botApiUrl + 'api/channelId', { channelId })
+                .pipe(
+                    map(res => {
+                        console.log('Sent channelId to bot service: ', channelId);
+                        return res;
+                    }),
+                    catchError(this.handleError)
+                );
     }
 
     private handleError(error: HttpErrorResponse) {

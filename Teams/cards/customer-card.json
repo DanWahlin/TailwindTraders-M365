@@ -69,9 +69,9 @@
     "actions": [
         {
             "type": "Action.OpenUrl",
-            "$when": "${$root.customerUrl != ''}",
+            "$when": "${$root.teamsTabLink != ''}",
             "title": "Customer Details",
-            "url": "${$root.customerUrl}"
+            "url": "${$root.teamsTabLink}"
         }
     ]
 }

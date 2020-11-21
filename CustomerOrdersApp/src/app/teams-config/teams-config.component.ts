@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as microsoftTeams from '@microsoft/teams-js';
+import { TeamsMessengerService } from '../core/services/teams-messenger.service';
 
 @Component({
   selector: 'cm-teams-config',
@@ -8,10 +9,15 @@ import * as microsoftTeams from '@microsoft/teams-js';
 })
 export class TeamsConfigComponent implements OnInit {
 
-  constructor() { }
+  constructor(private teamsMessengerService: TeamsMessengerService) { }
 
   ngOnInit() {
     microsoftTeams.initialize(() => {
+
+        microsoftTeams.getContext((context) => {
+            this.teamsMessengerService.sendChannelId(context.channelId).subscribe();
+        });
+
         microsoftTeams.settings.registerOnSaveHandler((saveEvent) => {
 
           const tabUrl = window.location.protocol + '//' + window.location.host + '/';

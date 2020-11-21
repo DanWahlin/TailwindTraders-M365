@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
-const ACData = require('adaptivecards-templating'),
-    AdaptiveCards = require('adaptivecards'),
-    { CardFactory, TeamsInfo } = require('botbuilder'),
+const { CardFactory, TeamsInfo } = require('botbuilder'),
 
     // Import required pckages
     path = require('path'),
@@ -113,14 +111,8 @@ server.post('/api/notify', async (req, res) => {
 
                 // Add deep link for Insert/Update changes so user can click to see customer
                 if (req.body.changeType !== 'Delete') {
-                    const teamsUrl = encodeURI(
-                        'https://teams.microsoft.com/l/entity/' +
-                        process.env.AppId + '/' +
-                        process.env.EntityId +
-                        '?label=Vi32&' +
-                        `context={"subEntityId": "${customer.id}", "channelId": "${req.body.channelId}" }`);
-                    customer.customerUrl = teamsUrl;
-                    console.log('Deep linking Url: ', teamsUrl);
+                    customer.customerUrl = botActivityHandler.getDeepLink(customer.id);
+                    console.log('Deep linking Url: ', customer.customerUrl);
                 }
 
                 const customerService = new CustomerService();
@@ -134,6 +126,14 @@ server.post('/api/notify', async (req, res) => {
     }
 
     res.json(req.body);
+});
+
+// Handle getting channelId sent from LOB app
+server.post('/api/channelId', async (req, res) => {
+    const channelId = req.body.channelId;
+    console.log('Received channelId: ', channelId);
+    botActivityHandler.setChannelId(channelId);
+    res.json({ channelId });
 });
 
 function getChangeType(changeType) {
