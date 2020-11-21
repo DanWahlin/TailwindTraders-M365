@@ -91,7 +91,7 @@ server.post('/api/messages', (req, res) => {
 // Used by Customer/Orders App to send update/delete/insert update notifications
 server.post('/api/notify', async (req, res) => {
     if (conversationReferences && Object.keys(conversationReferences).length === 0) {
-        console.log('\n RESTART BOT SERVER to hook up conversationReferences');
+        console.log('\n NO conversationReferences! Reinstall Teams app.');
     }
     
     for (const conversationReference of Object.values(conversationReferences)) {
