@@ -69,8 +69,15 @@ export class CustomerEditComponent implements OnInit {
 
   submit() {
     if (this.customer.id === 0) {
+      // Set joinDate for customer
       const today = new Date();
       this.customer.joinDate = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
+
+      // Get full state name
+      const state = this.getState(this.customer.state.abbreviation);
+      if (state) {
+        this.customer.state.name = state.name;
+      }
       
       this.dataService.insertCustomer(this.customer)
         .subscribe((insertedCustomer: ICustomer) => {
@@ -135,6 +142,14 @@ export class CustomerEditComponent implements OnInit {
       OKButtonText: 'Leave'
     };
     return this.modalService.show(modalContent);
+  }
+
+  getState(abbreviation: string) {
+    const states = this.states.filter(s => s.abbreviation === abbreviation);
+    if (states) {
+      return states[0];
+    } 
+    return null;
   }
 
 }
