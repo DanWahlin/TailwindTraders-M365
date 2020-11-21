@@ -91,7 +91,7 @@ server.post('/api/messages', (req, res) => {
 // Used by Customer/Orders App to send update/delete/insert update notifications
 server.post('/api/notify', async (req, res) => {
     if (conversationReferences && Object.keys(conversationReferences).length === 0) {
-        console.log('\n NO conversationReferences! Reinstall Teams app.');
+        console.log('\n********************\nNo bot conversationReferences! Reinstall Teams app.\n*******************');
     }
     
     for (const conversationReference of Object.values(conversationReferences)) {
@@ -110,13 +110,12 @@ server.post('/api/notify', async (req, res) => {
 
             if (customer) {
                 customer.changeType = getChangeType(req.body.changeType);  
-                customer.customerUrl = '';
                 console.log("Change type: ", req.body.changeType);
 
                 // Add deep link for Insert/Update changes so user can click to see customer
                 if (req.body.changeType !== 'Delete') {
-                    customer.customerUrl = botActivityHandler.getDeepLink(customer.id);
-                    console.log('Deep linking Url: ', customer.customerUrl);
+                    customer.teamsTabLink = botActivityHandler.getDeepLink(customer.id);
+                    console.log('Deep linking Url: ', customer.teamsTabLink);
                 }
 
                 const customerService = new CustomerService();
