@@ -100,7 +100,6 @@ class BotActivityHandler extends TeamsActivityHandler {
                     responseText = `<b>Your list of customers</b><br /><br /><table>`;
                     customers.forEach((customer) => {
                         customer.teamsTabLink = this.getDeepLink(customer.id);
-                        console.log('customer.teamsTabLink', customer.teamsTabLink);
                         responseText += `
                         <tr>
                             <td style="font-weight: bold; padding-right: 6pt;">
@@ -282,7 +281,7 @@ class BotActivityHandler extends TeamsActivityHandler {
             `https://teams.microsoft.com/l/entity/${process.env.AppId}/${process.env.EntityId}?label=Vi32&` +
             `context={"subEntityId": "${customerId}", "channelId": "${channelId}" }`
         );
-        console.log('Created deep link: ', deepLink);
+        // console.log('Created deep link: ', deepLink);
         return deepLink
     }
 
