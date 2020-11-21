@@ -152,6 +152,12 @@ app.get('/api/latestCustomer', (req, res) => {
         if (a.joinDate && b.joinDate) {
             return new Date(a.joinDate) > new Date(b.joinDate) ? a : b;
         }
+        else if (!a.joinDate) {
+            return b;
+        }
+        else if (!b.joinDate) {
+            return a;
+        }
     });
     res.json(latestCustomer);
 });

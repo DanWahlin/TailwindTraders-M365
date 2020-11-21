@@ -27,7 +27,8 @@ export class CustomerEditComponent implements OnInit {
       state: {
         abbreviation: '',
         name: ''
-      }
+      },
+      joinDate: ''
     };
   states: IState[];
   salesPeople: ISalesPerson[];
@@ -68,6 +69,9 @@ export class CustomerEditComponent implements OnInit {
 
   submit() {
     if (this.customer.id === 0) {
+      const today = new Date();
+      this.customer.joinDate = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
+      
       this.dataService.insertCustomer(this.customer)
         .subscribe((insertedCustomer: ICustomer) => {
           if (insertedCustomer) {

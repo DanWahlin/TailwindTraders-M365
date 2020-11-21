@@ -6,6 +6,7 @@ export interface ICustomer {
     address: string;
     city: string;
     state: IState;
+    joinDate: string;
     orders?: IOrder[];
     orderTotal?: number;
     latitude?: number;
