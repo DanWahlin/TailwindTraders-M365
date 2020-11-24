@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 
 import { GrowlerService, GrowlerMessageType } from './growler.service';
 import { LoggerService } from '../services/logger.service';
@@ -24,6 +24,7 @@ export class GrowlerComponent implements OnInit {
   @Input() timeout = 3000;
 
   constructor(private growlerService: GrowlerService,
+    private changeDetectorRef: ChangeDetectorRef,
     private logger: LoggerService) {
     growlerService.growl = this.growl.bind(this);
   }
@@ -55,6 +56,8 @@ export class GrowlerComponent implements OnInit {
         this.logger.log('removed ' + id);
       }
     });
+    // Need for mobile (for some reason???)
+    this.changeDetectorRef.detectChanges();
   }
 }
 

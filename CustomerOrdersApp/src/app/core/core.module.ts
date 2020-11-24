@@ -12,8 +12,13 @@ import { EnsureModuleLoadedOnceGuard } from './ensure-module-loaded-once.guard';
 import { MsalModule, MsalInterceptor } from '@azure/msal-angular';
 
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
+// Note that this won't work on mobile (iOS anyway) when in Teams
 const isIFrame = window.self !== window.top;
-const msalProviders = (!isIFrame) ? {
+// Check if we're running in Teams on mobile
+const teamsMobile = navigator.userAgent.toLowerCase().includes('teamsmobile');
+
+// If running in Teams don't include the MSAL interceptor
+const msalProviders = (!isIFrame && !teamsMobile) ? {
   provide: HTTP_INTERCEPTORS,
   useClass: MsalInterceptor,
   multi: true
